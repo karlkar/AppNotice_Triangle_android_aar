@@ -32,3 +32,4 @@ proguard/
 .idea/
 InAppConsent_Triangle.iml
 InAppConsent_Triangle_android.iml
+gradle/
