@@ -25,3 +25,10 @@ proguard/
 
 # Log Files
 *.log
+
+# Misc
+.DS_Store
+/captures
+.idea/
+InAppConsent_Triangle.iml
+InAppConsent_Triangle_android.iml
