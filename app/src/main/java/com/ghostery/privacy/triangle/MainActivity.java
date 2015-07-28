@@ -1,36 +1,91 @@
 package com.ghostery.privacy.triangle;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
+
+import com.ghostery.privacy.inappconsentsdk.callbacks.InAppConsent_Callback;
+import com.ghostery.privacy.inappconsentsdk.model.InAppConsent;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
+import java.util.HashMap;
 
 
 public class MainActivity extends ActionBarActivity {
     // Remove the below line after defining your own ad unit ID.
-    private static final String TOAST_TEXT = "Test ads are being shown. "
-            + "To show live ads, replace the ad unit ID in res/values/strings.xml with your own ad unit ID.";
+    private static final String TOAST_TEXT_SHOW = "AdMob ads are being shown.";
+    private static final String TOAST_TEXT_DISABLE = "AdMob ads are disabled.";
 
+    // Ghostery variables
+    private static final int GHOSTERY_COMPANYID = 242; // My Ghostery company ID
+    private static final int GHOSTERY_NOTICEID = 4722; // The Ghostery notice ID for this app
+    private static final int GHOSTERY_TRACKERID_ADMOB = 464; // Tracker ID: AdMob (note: you will need to define a variable for each tracker you have in your app)
+    private static final boolean GHOSTERY_USEREMOTEVALUES = true; // If true, causes SDK to override local SDK settings with those defined in the Ghostery Admin Portal
+    private InAppConsent inAppConsent; // Ghostery In-App Consent SDK object
+    private InAppConsent_Callback inAppConsent_callback; // Ghostery In-App Consent callback handler
+    private HashMap<Integer, Boolean> inAppConsent_privacyPreferences; // Map of non-essential trackers (by ID) and their on/off states
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Load an ad into the AdMob banner view.
-        AdView adView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
+        // Create the callback handler for the In-App Consent SDK
+        inAppConsent_callback = new InAppConsent_Callback() {
 
-        // Toasts the test ad message on the screen. Remove this after defining your own ad unit ID.
-        Toast.makeText(this, TOAST_TEXT, Toast.LENGTH_LONG).show();
+            // Called by the SDK when the user accepts or declines tracking from one of the Consent flow dialogs
+            @Override
+            public void onOptionSelected(boolean isAccepted, HashMap<Integer, Boolean> trackerHashMap) {
+                inAppConsent_privacyPreferences = trackerHashMap;
+                initAdMob(isAccepted && inAppConsent_privacyPreferences.get(GHOSTERY_TRACKERID_ADMOB));
+            }
+
+            // Called by the SDK when startConsentFlow is called but the SDK state meets one or more of the following conditions:
+            //   - The Implied Consent dialog has been already been displayed ghostery_ric_session_max_default times in the current session.
+            //   - The Implied Consent dialog has already been displayed ghostery_ric_max_default times in the last 30 days.
+            //   - The Explicit Consent dialog has already been accepted.
+            @Override
+            public void onNoticeSkipped() {
+                inAppConsent_privacyPreferences = inAppConsent.getTrackerPreferences();
+                initAdMob(inAppConsent_privacyPreferences.get(GHOSTERY_TRACKERID_ADMOB));
+            }
+
+            // Called by the SDK when the app-user is finished managing their privacy preferences on the Manage Preferences screen and navigates back your app
+            @Override
+            public void onTrackerStateChanged(HashMap<Integer, Boolean> trackerHashMap) {
+                inAppConsent_privacyPreferences = trackerHashMap;
+                initAdMob(inAppConsent_privacyPreferences.get(GHOSTERY_TRACKERID_ADMOB));
+            }
+        };
+
+        // Instantiate and start the Ghostery In-App Consent flow
+        inAppConsent = new InAppConsent();
+        inAppConsent.startConsentFlow(this, GHOSTERY_COMPANYID, GHOSTERY_NOTICEID, GHOSTERY_USEREMOTEVALUES, inAppConsent_callback);
     }
 
+    private void initAdMob(boolean isOn) {
+        // Load an ad into the AdMob banner view.
+        AdView adView = (AdView) findViewById(R.id.adView);
+
+        if (isOn) {
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.setVisibility(View.VISIBLE);
+            adView.loadAd(adRequest);
+
+            // Toasts the AdMob showing message
+            Toast.makeText(this, TOAST_TEXT_SHOW, Toast.LENGTH_LONG).show();
+        } else {
+            adView.pause();
+            adView.setVisibility(View.GONE);
+
+            // Toasts the AdMob disabled message
+            Toast.makeText(this, TOAST_TEXT_DISABLE, Toast.LENGTH_LONG).show();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -47,6 +102,9 @@ public class MainActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
+            return true;
+        } else if (id == R.id.action_privacyPreferences) {
+            inAppConsent.showManagePreferences(this, GHOSTERY_COMPANYID, GHOSTERY_NOTICEID, GHOSTERY_USEREMOTEVALUES, inAppConsent_callback);
             return true;
         }
 
