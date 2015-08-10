@@ -1,4 +1,4 @@
-package com.ghostery.privacy.triangle;
+package com.ghostery.privacy.triangle_aar;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

@@ -1,7 +1,8 @@
-package com.ghostery.privacy.triangle;
+package com.ghostery.privacy.triangle_aar;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,14 +16,16 @@ import com.google.android.gms.ads.AdView;
 import java.util.HashMap;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
+    private final static String TAG = "Triangle_aar";
+
     // Remove the below line after defining your own ad unit ID.
     private static final String TOAST_TEXT_SHOW = "AdMob ads are being shown.";
     private static final String TOAST_TEXT_DISABLE = "AdMob ads are disabled.";
 
     // Ghostery variables
     private static final int GHOSTERY_COMPANYID = 242; // My Ghostery company ID
-    private static final int GHOSTERY_NOTICEID = 4722; // The Ghostery notice ID for this app
+    private static final int GHOSTERY_NOTICEID = 4721; // The Ghostery notice ID for this app
     private static final int GHOSTERY_TRACKERID_ADMOB = 464; // Tracker ID: AdMob (note: you will need to define a variable for each tracker you have in your app)
     private static final boolean GHOSTERY_USEREMOTEVALUES = true; // If true, causes SDK to override local SDK settings with those defined in the Ghostery Admin Portal
     private InAppConsent inAppConsent; // Ghostery In-App Consent SDK object
@@ -40,8 +43,18 @@ public class MainActivity extends ActionBarActivity {
             // Called by the SDK when the user accepts or declines tracking from one of the Consent flow dialogs
             @Override
             public void onOptionSelected(boolean isAccepted, HashMap<Integer, Boolean> trackerHashMap) {
-                inAppConsent_privacyPreferences = trackerHashMap;
-                initAdMob(isAccepted && inAppConsent_privacyPreferences.get(GHOSTERY_TRACKERID_ADMOB));
+                // Handle your response
+                if (isAccepted) {
+                    inAppConsent_privacyPreferences = trackerHashMap;
+                    initAdMob(isAccepted && inAppConsent_privacyPreferences.get(GHOSTERY_TRACKERID_ADMOB));
+                } else {
+                    try {
+                        DeclineConfirmation_DialogFragment dialog = new DeclineConfirmation_DialogFragment();
+                        dialog.show(getFragmentManager(), "DeclineConfirmation_DialogFragment");
+                    } catch (IllegalStateException e) {
+                        Log.e(TAG, "Error while trying to display the decline-confirmation dialog.", e);
+                    }
+                }
             }
 
             // Called by the SDK when startConsentFlow is called but the SDK state meets one or more of the following conditions:
@@ -63,8 +76,8 @@ public class MainActivity extends ActionBarActivity {
         };
 
         // Instantiate and start the Ghostery In-App Consent flow
-        inAppConsent = new InAppConsent();
-        inAppConsent.startConsentFlow(this, GHOSTERY_COMPANYID, GHOSTERY_NOTICEID, GHOSTERY_USEREMOTEVALUES, inAppConsent_callback);
+        inAppConsent = new InAppConsent(this);
+        inAppConsent.startConsentFlow(GHOSTERY_COMPANYID, GHOSTERY_NOTICEID, GHOSTERY_USEREMOTEVALUES, inAppConsent_callback);
     }
 
     private void initAdMob(boolean isOn) {
@@ -104,7 +117,10 @@ public class MainActivity extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.action_privacyPreferences) {
-            inAppConsent.showManagePreferences(this, GHOSTERY_COMPANYID, GHOSTERY_NOTICEID, GHOSTERY_USEREMOTEVALUES, inAppConsent_callback);
+            inAppConsent.showManagePreferences(GHOSTERY_COMPANYID, GHOSTERY_NOTICEID, GHOSTERY_USEREMOTEVALUES, inAppConsent_callback);
+            return true;
+        } else if (id == R.id.action_resetAppNoticeSdk) {
+            inAppConsent.resetSDK();
             return true;
         }
 

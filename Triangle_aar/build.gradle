@@ -12,7 +12,7 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        applicationId "com.ghostery.privacy.triangle"
+        applicationId "com.ghostery.privacy.triangle_aar"
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
