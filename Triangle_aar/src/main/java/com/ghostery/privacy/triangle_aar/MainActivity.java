@@ -1,5 +1,6 @@
 package com.ghostery.privacy.triangle_aar;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -18,15 +19,19 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
     private final static String TAG = "Triangle_aar";
+    private static Activity activity;
 
     // Remove the below line after defining your own ad unit ID.
     private static final String TOAST_TEXT_SHOW = "AdMob ads are being shown.";
     private static final String TOAST_TEXT_DISABLE = "AdMob ads are disabled.";
+    private static final String TOAST_TEXT_NO_ADMOB = "AdMob state not found in privacy preferences.";
+    private static final String TOAST_TEXT_NOPREFS = "No privacy preferences returned.";
 
     // Ghostery variables
-    private static final int GHOSTERY_COMPANYID = 242; // My Ghostery company ID
-    private static final int GHOSTERY_NOTICEID = 4721; // The Ghostery notice ID for this app
-    private static final int GHOSTERY_TRACKERID_ADMOB = 464; // Tracker ID: AdMob (note: you will need to define a variable for each tracker you have in your app)
+    // Note: Use your custom values for the Company ID, Notice ID and all or your tracker IDs. These test values won't work in your environment.
+    private static final int GHOSTERY_COMPANYID = 242; // My Ghostery company ID (NOTE: Use your value here)
+    private static final int GHOSTERY_NOTICEID = 6106; // The Ghostery notice ID for this app (NOTE: Use your value here)
+    private static final int GHOSTERY_TRACKERID_ADMOB = 464; // Tracker ID: AdMob (NOTE: you will need to define a variable for each tracker you have in your app)
     private static final boolean GHOSTERY_USEREMOTEVALUES = true; // If true, causes SDK to override local SDK settings with those defined in the Ghostery Admin Portal
     private InAppConsent inAppConsent; // Ghostery In-App Consent SDK object
     private InAppConsent_Callback inAppConsent_callback; // Ghostery In-App Consent callback handler
@@ -36,17 +41,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        activity = this;
 
         // Create the callback handler for the In-App Consent SDK
         inAppConsent_callback = new InAppConsent_Callback() {
 
             // Called by the SDK when the user accepts or declines tracking from one of the Consent flow dialogs
             @Override
-            public void onOptionSelected(boolean isAccepted, HashMap<Integer, Boolean> trackerHashMap) {
+            public void onOptionSelected(boolean isAccepted, HashMap<Integer, Boolean> inAppConsent_privacyPreferences) {
                 // Handle your response
                 if (isAccepted) {
-                    inAppConsent_privacyPreferences = trackerHashMap;
-                    initAdMob(isAccepted && inAppConsent_privacyPreferences.get(GHOSTERY_TRACKERID_ADMOB));
+                    Boolean adMobEnabled = false;
+                    if (inAppConsent_privacyPreferences.size() > 0) {
+                        adMobEnabled = inAppConsent_privacyPreferences.get(GHOSTERY_TRACKERID_ADMOB);
+                        if (adMobEnabled == null)   // If ttracker was not found in list, assume it is disabled
+                            Toast.makeText(activity, TOAST_TEXT_NO_ADMOB, Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(activity, TOAST_TEXT_NOPREFS, Toast.LENGTH_LONG).show();
+                    }
+                    initAdMob(adMobEnabled);
                 } else {
                     try {
                         DeclineConfirmation_DialogFragment dialog = new DeclineConfirmation_DialogFragment();
@@ -80,11 +93,11 @@ public class MainActivity extends AppCompatActivity {
         inAppConsent.startConsentFlow(GHOSTERY_COMPANYID, GHOSTERY_NOTICEID, GHOSTERY_USEREMOTEVALUES, inAppConsent_callback);
     }
 
-    private void initAdMob(boolean isOn) {
+    private void initAdMob(Boolean isOn) {
         // Load an ad into the AdMob banner view.
         AdView adView = (AdView) findViewById(R.id.adView);
 
-        if (isOn) {
+        if (isOn != null && isOn) {
             AdRequest adRequest = new AdRequest.Builder().build();
             adView.setVisibility(View.VISIBLE);
             adView.loadAd(adRequest);
