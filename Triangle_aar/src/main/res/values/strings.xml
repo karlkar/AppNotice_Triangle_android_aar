@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Triangle</string>
+    <string name="app_name">.Triangle_aar</string>
 
     <string name="action_settings">Settings</string>
     <string name="action_privacyPreferences">Privacy Preferences</string>
