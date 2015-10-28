@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.ghostery.privacy.appnoticesdk.callbacks.AppNotice_Callback;
-import com.ghostery.privacy.appnoticesdk.model.AppNotice;
+import com.ghostery.privacy.appnoticesdk.AppNotice;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(activity, TOAST_TEXT_NOPREFS, Toast.LENGTH_LONG).show();
                     }
-                    initAdMob(adMobEnabled);
+                    manageAdMob(adMobEnabled);
                 } else {
                     try {
                         DeclineConfirmation_DialogFragment dialog = new DeclineConfirmation_DialogFragment();
@@ -77,24 +77,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onNoticeSkipped() {
                 appNotice_privacyPreferences = appNotice.getTrackerPreferences();
-                initAdMob(appNotice_privacyPreferences.get(GHOSTERY_TRACKERID_ADMOB));
+                manageAdMob(appNotice_privacyPreferences.get(GHOSTERY_TRACKERID_ADMOB));
             }
 
             // Called by the SDK when the app-user is finished managing their privacy preferences on the Manage Preferences screen and navigates back your app
             @Override
             public void onTrackerStateChanged(HashMap<Integer, Boolean> trackerHashMap) {
                 appNotice_privacyPreferences = trackerHashMap;
-                initAdMob(appNotice_privacyPreferences.get(GHOSTERY_TRACKERID_ADMOB));
+                manageAdMob(appNotice_privacyPreferences.get(GHOSTERY_TRACKERID_ADMOB));
             }
         };
 
         // Instantiate and start the Ghostery consent flow
-        appNotice = new AppNotice(this);
-        appNotice.startConsentFlow(GHOSTERY_COMPANYID, GHOSTERY_NOTICEID, GHOSTERY_USEREMOTEVALUES, appNotice_callback);
+        appNotice = new AppNotice(this, GHOSTERY_COMPANYID, GHOSTERY_NOTICEID, GHOSTERY_USEREMOTEVALUES, appNotice_callback);
+        appNotice.startConsentFlow();
     }
 
-    private void initAdMob(Boolean isOn) {
-        // Load an ad into the AdMob banner view.
+    private void manageAdMob(Boolean isOn) {
+        // Get the AdMob banner view
         AdView adView = (AdView) findViewById(R.id.adView);
 
         if (isOn != null && isOn) {
@@ -102,13 +102,13 @@ public class MainActivity extends AppCompatActivity {
             adView.setVisibility(View.VISIBLE);
             adView.loadAd(adRequest);
 
-            // Toasts the AdMob showing message
+            // Toast the AdMob showing message
             Toast.makeText(this, TOAST_TEXT_SHOW, Toast.LENGTH_LONG).show();
         } else {
             adView.pause();
             adView.setVisibility(View.GONE);
 
-            // Toasts the AdMob disabled message
+            // Toast the AdMob disabled message
             Toast.makeText(this, TOAST_TEXT_DISABLE, Toast.LENGTH_LONG).show();
         }
     }
@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.action_privacyPreferences) {
-            appNotice.showManagePreferences(GHOSTERY_COMPANYID, GHOSTERY_NOTICEID, GHOSTERY_USEREMOTEVALUES, appNotice_callback);
+            appNotice.showManagePreferences();
             return true;
         } else if (id == R.id.action_resetAppNoticeSdk) {
             appNotice.resetSDK();
