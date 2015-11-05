@@ -47,6 +47,9 @@
             android:configChanges="orientation|keyboardHidden|screenSize" android:screenOrientation="unspecified" android:alwaysRetainTaskState="true" android:clearTaskOnLaunch="false"
             >
         </activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="cf165384e5fdb9166002d31a6e6a8324521a552c" />
     </application>
 
 </manifest>
