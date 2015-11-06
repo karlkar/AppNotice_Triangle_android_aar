@@ -7,6 +7,7 @@
         android:orderInCategory="110" app:showAsAction="never" />
     <item android:id="@+id/action_resetAppNoticeSdk" android:title="@string/action_resetAppNoticeSdk"
         android:orderInCategory="120" app:showAsAction="never" />
-    <item android:id="@+id/action_forceCrash" android:title="@string/action_forceCrash"
-          android:orderInCategory="140" app:showAsAction="never" />
+    <!-- This menu item enables an option to manually force an app crach to test the Crashlytics plut-in. -->
+    <!--<item android:id="@+id/action_forceCrash" android:title="@string/action_forceCrash"-->
+          <!--android:orderInCategory="140" app:showAsAction="never" />-->
 </menu>

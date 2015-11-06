@@ -122,6 +122,8 @@ public class MainActivity extends AppCompatActivity {
 
             if (adMobEnabled) {
 				// Start the AdMob tracker as specified by the user
+				// (Note: If there were a way to detect that this tracker were already running, we
+				// could avoid restarting the tracker in that case.)
                 AdRequest adRequest = new AdRequest.Builder().build();
                 adView.setVisibility(View.VISIBLE);
                 adView.loadAd(adRequest);
@@ -150,7 +152,8 @@ public class MainActivity extends AppCompatActivity {
             Boolean crashlyticsEnabled = trackerHashMap.get(GHOSTERY_TRACKERID_CRASHLYTICS) == null? false : trackerHashMap.get(GHOSTERY_TRACKERID_CRASHLYTICS);
 			if (Fabric.isInitialized()) {	// Crashlytics is running in this session
 				if (crashlyticsEnabled) {
-					// Do nothing: Crashlytics is enabled and running
+					// Toast the Crashlytics is enabled message (optional)
+					Toast.makeText(this, TOAST_CRASHLYTICS_ENABLE, Toast.LENGTH_LONG).show();
 				} else {
 					// Remember to notify the user that an app restart is required to disable this tracker:
 					// To honor a user's withdrawn consent, if a tracker can NOT be turned off or
@@ -203,8 +206,8 @@ public class MainActivity extends AppCompatActivity {
         } else if (id == R.id.action_resetAppNoticeSdk) {
             appNotice.resetSDK();
             return true;
-        } else if (id == R.id.action_forceCrash) {
-            throw new RuntimeException(getResources().getString(R.string.action_forceCrash_message));
+//        } else if (id == R.id.action_forceCrash) {
+//            throw new RuntimeException(getResources().getString(R.string.action_forceCrash_message));
         }
 
         return super.onOptionsItemSelected(item);
