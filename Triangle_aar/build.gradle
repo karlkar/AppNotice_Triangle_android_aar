@@ -20,13 +20,13 @@ repositories {
 
 android {
     compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    buildToolsVersion '23.0.2'
 
     defaultConfig {
         applicationId "com.ghostery.privacy.triangle_aar"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 16
+        versionCode 17
         versionName "1.1.0"
     }
     buildTypes {
