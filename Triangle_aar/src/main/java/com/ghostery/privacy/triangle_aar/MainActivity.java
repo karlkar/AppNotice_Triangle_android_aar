@@ -1,6 +1,7 @@
 package com.ghostery.privacy.triangle_aar;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import com.crashlytics.android.Crashlytics;
 import com.ghostery.privacy.appnoticesdk.AppNotice;
 import com.ghostery.privacy.appnoticesdk.callbacks.AppNotice_Callback;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
@@ -44,13 +46,24 @@ public class MainActivity extends AppCompatActivity {
     private static final boolean GHOSTERY_USEREMOTEVALUES = false; // If true, causes SDK to override local SDK settings with those defined in the Ghostery Admin Portal
     private AppNotice appNotice; // Ghostery App Notice SDK object
     private AppNotice_Callback appNotice_callback; // Ghostery App Notice callback handler
-	boolean appRestartRequired; // Ghostery parameter to track if app needs to be restarted after opt-out
+	private boolean appRestartRequired; // Ghostery parameter to track if app needs to be restarted after opt-out
+    private AdView adView;
+	private final boolean isTestingAds = true; // Switch to make it easy on changing ad-testing mode
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         activity = this;
+
+        // Get the AdMob banner view and set an ad-loaded listner
+        adView = (AdView) findViewById(R.id.adView);
+        adView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+				// Handle ad-loaded event
+            }
+        });
 
         // Create the callback handler for the App Notice SDK
         appNotice_callback = new AppNotice_Callback() {
@@ -117,16 +130,26 @@ public class MainActivity extends AppCompatActivity {
 			// single session. The AdMob tracker is turned on and off as directed by a user's
 			// privacy preferences.
             Boolean adMobEnabled = trackerHashMap.get(GHOSTERY_TRACKERID_ADMOB) == null? false : trackerHashMap.get(GHOSTERY_TRACKERID_ADMOB);
-            // Get the AdMob banner view
-            AdView adView = (AdView) findViewById(R.id.adView);
 
             if (adMobEnabled) {
+				boolean inEmulator = Build.BRAND.toLowerCase().startsWith("generic");
+
 				// Start the AdMob tracker as specified by the user
 				// (Note: If there were a way to detect that this tracker were already running, we
 				// could avoid restarting the tracker in that case.)
-                AdRequest adRequest = new AdRequest.Builder().build();
+				AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
+				if (isTestingAds) {
+					if (inEmulator) {
+						adRequestBuilder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
+					} else {
+						adRequestBuilder.addTestDevice("8E86E615D3646127F9A6DE11B6E8C533");
+					}
+				}
+                AdRequest adRequest = adRequestBuilder.build();
+
                 adView.setVisibility(View.VISIBLE);
-                adView.loadAd(adRequest);
+				adView.bringToFront();
+				adView.loadAd(adRequest);
 
                 // Toast the AdMob showing message (optional)
                 Toast.makeText(this, TOAST_ADMOB_ENABLE, Toast.LENGTH_LONG).show();
