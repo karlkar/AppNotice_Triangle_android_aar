@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Dialog text -->
+    <!-- Text of the close button in the Implied Consent flow dialog. JSON: close_button -->
+    <string name="ghostery_dialog_button_close">Fechar</string>
+    <!-- Text of the Accept button in the Explicit Consent flow dialog. JSON: bric_access_button_text -->
+    <string name="ghostery_dialog_button_consent">Aceitar</string>
+    <!-- Text of the Decline button in the Explicit Consent flow dialog. JSON: bric_decline_button_text -->
+    <string name="ghostery_dialog_button_decline">Recusar</string>
+    <!-- Text of the Manage Preferences button in the Explicit Consent flow dialog. JSON: ric_click_manage_settings -->
+    <string name="ghostery_dialog_button_preferences">Gerencie Prefer&#xea;ncias</string>
+    <!-- Text of the message in the Explicit Consent flow dialog. JSON: bric_content1 -->
+    <string name="ghostery_dialog_explicit_message">O aplicativo de Triangle usa tecnologias de modo que n&#xf3;s e os nossos parceiros, podemos lembrar de voc&#xea; e entender como voc&#xea; usa o nosso app. Para ver uma lista completa dessas tecnologias e para nos dizer explicitamente se eles podem ser usados no seu dispositivo, clique no bot&#xe3;o \"Gerencie Prefer&#xea;ncias\" bot&#xe3;o abaixo. Para nos dar o seu consentimento, clique no \"Aceitar\" bot&#xe3;o.</string>
+    <!-- Text of the title in both the Explicit Consent and Implied consent flow dialogs. JSON: bric_header_text and ric_title -->
+    <string name="ghostery_dialog_header_text">Triangle Preocupamos Com Sua Privacidade</string>
+    <!-- Text of the message in the Implied Consent flow dialog. JSON: ric -->
+    <string name="ghostery_dialog_implicit_message">O aplicativo de Triangle usa tecnologias de modo que n&#xf3;s e os nossos parceiros, podemos lembrar de voc&#xea; e entender como voc&#xea; usa o nosso app. Para ver uma lista completa dessas tecnologias e para nos dizer se eles podem ser usados ??no seu dispositivo, clique no bot&#xe3;o \"Gerenciar Preferences\" bot&#xe3;o abaixo. O recurso a este app ser&#xe1; considerado consentimento.</string>
+    <!-- Text of the Please-wait message that is displayed whild downloading the app-notice preferences -->
+    <string name="ghostery_dialog_pleaseWait">Espere por favor ...</string>
+
+    <!-- Manage Preferences -->
+    <!-- Text of the description section near the top of the privacy preferences screen. JSON: manage_preferences_description -->
+    <string name="ghostery_preferences_description">Triangle coleta dados sobre seu uso deste app. N&#xf3;s respeitamos a sua privacidade e se voc&#xea; gostaria de limitar os dados que coletamos por favor, use o painel de controle abaixo. Para saber mais sobre como usamos os dados por favor visite nossa pol&#xed;tica de privacidade.</string>
+    <!-- Text of the learn-more paragraph above the learn-more link on the vendor detail screen -->
+    <string name="ghostery_preferences_detail_learnmore">Para saber mais sobre como podemos coletar e usar informa&#xe7;&#xf5;es para aplicativos m&#xf3;veis, visite:</string>
+    <!-- Text used in the case there is no learn-more link provided -->
+    <string name="ghostery_preferences_detail_learnmore_not_provided">Pol&#xed;tica de Privacidade N&#xe3;o Fornecido</string>
+    <!-- Text for the header above the vendor-info section of the vendor detail screen -->
+    <string name="ghostery_preferences_detail_trackerinfo">Rastreador de Informa&#xe7;&#xf5;es</string>
+    <!-- Text that is displayed when no vendors are available for display on the privacy preferences screen -->
+    <string name="ghostery_preferences_empty_list">N&#xe3;o foi poss&#xed;vel carregar a lista de trackers. Por favor, verifique se voc&#xea; tem acesso &#xe0; internet, e tente novamente mais tarde.</string>
+    <!-- Title text on the privacy preferences screen. JSON: manage_preferences_header -->
+    <string name="ghostery_preferences_header">Gerir Prefer&#xea;ncias</string>
+    <!-- Text of the Opt-in main text on the privacy preferences screen -->
+    <string name="ghostery_preferences_optin_text">Opt In</string>
+    <!-- Text of the Opt-in subtext on the privacy preferences screen -->
+    <string name="ghostery_preferences_optin_subtext">Para todos os trackers listados abaixo.</string>
+    <!-- Text for the select-all control on the privacy preferences screen -->
+    <string name="ghostery_preferences_select_all">Todos</string>
+    <!-- Text for the select-none control on the privacy preferences screen -->
+    <string name="ghostery_preferences_select_none">Nenhum</string>
+
+    <!-- Tracker Detail -->
+    <!-- Header text on the vendor detail screen -->
+    <string name="ghostery_tracker_detail_title">Detalhe Rastreador</string>
+    <!-- Title text of the learn-more screen -->
+    <string name="ghostery_tracker_learnmore_title">Saiba Mais</string>
+
+</resources>
