@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // Called by the SDK when startConsentFlow is called but the SDK state meets one or more of the following conditions:
-            //   - The Implied Consent dialog has been already been displayed ghostery_ric_session_max_default times in the current session.
+            //   - The Implied Consent dialog has already been displayed ghostery_ric_session_max_default times in the current session.
             //   - The Implied Consent dialog has already been displayed ghostery_ric_max_default times in the last 30 days.
             //   - The Explicit Consent dialog has already been accepted.
             @Override

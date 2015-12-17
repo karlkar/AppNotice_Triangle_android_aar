@@ -21,7 +21,7 @@
     <color name="ghostery_list_vendor_name_text_color">#212121</color>
     <!-- Color of the divider used between categories in the vendor list -->
     <color name="ghostery_list_category_divider_color">#AAAAAA</color>
-    <!-- Color of the divider used between list items in the vendor list (default matches background color so it disapeares) -->
+    <!-- Color of the divider used between list items in the vendor list (default matches background color so it disappears) -->
     <color name="ghostery_list_divider_color">#FFFFFF</color>
     <!-- Vendor list and list item background color -->
     <color name="ghostery_list_background">#FFFFFF</color>
