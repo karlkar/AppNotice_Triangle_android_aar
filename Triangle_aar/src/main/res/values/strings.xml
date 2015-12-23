@@ -8,8 +8,8 @@
     <string name="action_forceCrash_message">Intentional app crash to test Crashlytics</string>
 
     <!-- Decline Confirmation dialog -->
-    <string name="declineConfirmDialog_title">Tracking Declined</string>
-    <string name="declineConfirmDialog_message">You must accept the privacy preferences to use this app. Please restart this app if you would like to try again. This app will now close.</string>
+    <string name="declineConfirmDialog_title">Declined Consent</string>
+    <string name="declineConfirmDialog_message">To enjoy the full functionality of this app, you must either upgrade to the paid version or accept the privacy preferences in this version. Please restart this app if you would like to accept. This app will now continue with limited functionality.</string>
     <string name="declineConfirmDialog_posBtn">OK</string>
 
     <!-- Restart-app dialog -->
