@@ -15,7 +15,7 @@
     <string name="ghostery_dialog_header_text">A Triangle le interesa su privacidad</string>
     <!-- Text of the message in the Implied Consent flow dialog. JSON: ric -->
     <string name="ghostery_dialog_implicit_message">El aplicación de Triangle usa tecnologías para que nosotros, y nuestros colaboradores, podamos recordarle y comprender cómo usa usted nuestra app. Para ver una lista completa de estas tecnologías y para decirnos si pueden ser utilizadas en su dispositivo, pulse el botón  \"Gestionar preferencias\" que aparece más abajo. Si sigue utlizado esta app se considerará que ha dado su consentimiento.</string>
-    <!-- Text of the Please-wait message that is displayed whild downloading the app-notice preferences -->
+    <!-- Text of the Please-wait message that is displayed while downloading the app-notice preferences -->
     <string name="ghostery_dialog_pleaseWait">Por favor espere...</string>
 
     <!-- Manage Preferences -->

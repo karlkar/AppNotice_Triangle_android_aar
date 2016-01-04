@@ -2,7 +2,7 @@
 
     <!-- Configuration-->
     <!-- Height of the category divider on the privacy preferences screen -->
-    <integer name="ghostery_list_category_divider_height">1</integer>
+    <dimen name="ghostery_list_category_divider_height">1dp</dimen>
     <!-- Height of the list-item divider on the privacy preferences screen -->
     <integer name="ghostery_list_divider_height">0</integer>
 
