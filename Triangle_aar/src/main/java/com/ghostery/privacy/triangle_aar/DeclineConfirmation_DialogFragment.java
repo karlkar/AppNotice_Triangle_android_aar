@@ -21,9 +21,6 @@ public class DeclineConfirmation_DialogFragment extends DialogFragment
         builder.setPositiveButton(getActivity().getString(R.string.declineConfirmDialog_posBtn), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
-                // Close the app
-                System.exit(0);
             }
         });
 

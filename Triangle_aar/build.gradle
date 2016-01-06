@@ -26,8 +26,8 @@ android {
         applicationId "com.ghostery.privacy.triangle_aar"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 17
-        versionName "1.1.0"
+        versionCode 19
+        versionName "1.1.1"
     }
     buildTypes {
         release {
@@ -35,14 +35,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    lintOptions {
+        disable 'MissingTranslation'
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.google.android.gms:play-services-ads:6.5.87'
     compile 'com.ghostery.privacy.appnoticesdk:AppNoticeSDK:@aar'
     compile('com.crashlytics.sdk.android:crashlytics:2.5.2@aar') {
         transitive = true;
     }
+    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.google.android.gms:play-services-ads:8.3.0'
 }
