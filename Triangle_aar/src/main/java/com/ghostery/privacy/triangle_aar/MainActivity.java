@@ -1,6 +1,7 @@
 package com.ghostery.privacy.triangle_aar;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Context context = App.getContext();
         activity = this;
 
         // Get the AdMob banner view and set an ad-loaded listner
