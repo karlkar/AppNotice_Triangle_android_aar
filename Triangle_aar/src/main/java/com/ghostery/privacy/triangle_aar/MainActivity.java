@@ -102,6 +102,8 @@ public class MainActivity extends AppCompatActivity {
                 manageTrackers(trackerHashMap);
             }
 
+            // Called by the SDK when the Manage Preferences button is clicked in the consent flow dialog.
+            // Return true if your app has displayed the SDK's manage preferences screen, otherwise, return false.
             @Override
             public boolean onManagePreferencesClicked() {
                 // Open hybrid preferences screen
