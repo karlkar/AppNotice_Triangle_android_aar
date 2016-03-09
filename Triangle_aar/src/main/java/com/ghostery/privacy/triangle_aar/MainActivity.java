@@ -2,6 +2,7 @@ package com.ghostery.privacy.triangle_aar;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int GHOSTERY_TRACKERID_CRASHLYTICS = 3140; // Tracker ID: Crashlytics
 
     private static final boolean GHOSTERY_USEREMOTEVALUES = false; // If true, causes SDK to override local SDK settings with those defined in the Ghostery Admin Portal
-    private AppNotice appNotice; // Ghostery App Notice SDK object
+    private static AppNotice appNotice; // Ghostery App Notice SDK object
     private AppNotice_Callback appNotice_callback; // Ghostery App Notice callback handler
 	private boolean appRestartRequired; // Ghostery parameter to track if app needs to be restarted after opt-out
     private AdView adView;
@@ -100,6 +101,17 @@ public class MainActivity extends AppCompatActivity {
             public void onTrackerStateChanged(HashMap<Integer, Boolean> trackerHashMap) {
                 manageTrackers(trackerHashMap);
             }
+
+            // Called by the SDK when the Manage Preferences button is clicked in the consent flow dialog.
+            // Return true if your app has displayed the SDK's manage preferences screen, otherwise, return false.
+            @Override
+            public boolean onManagePreferencesClicked() {
+                // Open hybrid preferences screen
+                Intent i = new Intent(getBaseContext(), HybridPrivacySettings.class);
+                startActivity(i);
+                return true;  // Handled
+            }
+
         };
 
         // Instantiate and start the Ghostery consent flow:
@@ -228,6 +240,11 @@ public class MainActivity extends AppCompatActivity {
         } else if (id == R.id.action_privacyPreferences) {
             appNotice.showManagePreferences();
             return true;
+        } else if (id == R.id.action_hybridPrivacyPreferences) {
+            // Open hybrid preferences screen
+            Intent i = new Intent(getBaseContext(), HybridPrivacySettings.class);
+            startActivity(i);
+            return true;
         } else if (id == R.id.action_resetAppNoticeSdk) {
             appNotice.resetSDK();
             return true;
@@ -238,4 +255,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public static AppNotice getAppNotice() {
+        return appNotice;
+    }
 }
