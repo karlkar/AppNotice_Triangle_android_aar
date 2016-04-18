@@ -2,9 +2,11 @@ package com.ghostery.privacy.triangle_aar;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -45,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int GHOSTERY_TRACKERID_ADMOB = 464; // Tracker ID: AdMob
     private static final int GHOSTERY_TRACKERID_CRASHLYTICS = 3140; // Tracker ID: Crashlytics
 
-    private static final boolean GHOSTERY_USEREMOTEVALUES = false; // If true, causes SDK to override local SDK settings with those defined in the Ghostery Admin Portal
     private static AppNotice appNotice; // Ghostery App Notice SDK object
     private AppNotice_Callback appNotice_callback; // Ghostery App Notice callback handler
 	private boolean appRestartRequired; // Ghostery parameter to track if app needs to be restarted after opt-out
@@ -119,8 +120,15 @@ public class MainActivity extends AppCompatActivity {
 		// before any trackers are started. In this demo, all trackers are only started from within
 		// the manageTrackers method, and the manageTrackers method is only called from the App Notice
 		// call-back handler. This ensures that trackers are only started with a users prior consent.
-        appNotice = new AppNotice(this, GHOSTERY_COMPANYID, GHOSTERY_CONFIGID, GHOSTERY_USEREMOTEVALUES, appNotice_callback);
-        appNotice.startConsentFlow();
+        appNotice = new AppNotice(this, GHOSTERY_COMPANYID, GHOSTERY_CONFIGID, appNotice_callback);
+
+        final String modeImplied = getResources().getString(R.string.mode_implied);
+        boolean isImplied = AppData.getString(AppData.APPDATA_CONSENT_FLOW_MODE, modeImplied).equals(modeImplied);
+        if (isImplied) {
+            appNotice.startImpliedConsentFlow();
+        } else {
+            appNotice.startExplicitConsentFlow();
+        }
     }
 
 	@Override
@@ -236,6 +244,25 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
+            final String modeImplied = getResources().getString(R.string.mode_implied);
+            final String modeExplicit = getResources().getString(R.string.mode_explicit);
+            boolean isImplied = AppData.getString(AppData.APPDATA_CONSENT_FLOW_MODE, modeImplied).equals(modeImplied);
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.settings_title)
+                    .setMessage(getResources().getString(R.string.settings_current_mode) + " " + (isImplied? modeImplied : modeExplicit))
+                    .setIcon(null)
+                    .setPositiveButton(modeImplied, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            AppData.setString(AppData.APPDATA_CONSENT_FLOW_MODE, modeImplied);
+                        }
+                    })
+                    .setNegativeButton(modeExplicit, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            AppData.setString(AppData.APPDATA_CONSENT_FLOW_MODE, modeExplicit);
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
             return true;
         } else if (id == R.id.action_privacyPreferences) {
             appNotice.showManagePreferences();
