@@ -6,7 +6,7 @@
     <!-- Height of the list-item divider on the privacy preferences screen -->
     <integer name="ghostery_list_divider_height">0</integer>
 
-    <!-- Max times to display the Implied consent flow in a 30-day period. When set to 0, displayed whenever a new config ID is detected. -->
+    <!-- Max times to display the Implied consent flow in a 30-day period. When set to 0, displayed only on startup (or SDK reset) and whenever a new config ID is detected. -->
     <integer name="ghostery_implied_flow_30day_display_max">0</integer>
     <!-- Max times to display the Implied consent flow in an app session. -->
     <integer name="ghostery_implied_flow_session_display_max">1</integer>

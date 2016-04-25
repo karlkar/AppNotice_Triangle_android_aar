@@ -40,8 +40,7 @@ public class MainActivity extends AppCompatActivity {
     // Ghostery variables
     // Note: Use your custom values for the Company ID, Notice ID and all or your tracker IDs. These test values won't work in your environment.
     private static final int GHOSTERY_COMPANYID = 242; // My Ghostery company ID (NOTE: Use your value here)
-    //private static final int GHOSTERY_CONFIGID = 6690; // The Ghostery configuration ID for this app (NOTE: Use your value here) (Implied)
-    private static final int GHOSTERY_CONFIGID = 6691; // The Ghostery configuration ID for this app (NOTE: Use your value here) (Explicit)
+    private static final int GHOSTERY_NOTICEID = 6691; // The Ghostery Notice ID for this app (NOTE: Use your value here)
 
     // Ghostery tracker IDs (NOTE: you will need to define a variable for each tracker you have in your app)
     private static final int GHOSTERY_TRACKERID_ADMOB = 464; // Tracker ID: AdMob
@@ -88,9 +87,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            // Called by the SDK when startConsentFlow is called but the SDK state meets one or more of the following conditions:
-            //   - The Implied Consent dialog has already been displayed ghostery_ric_session_max_default times in the current session.
-            //   - The Implied Consent dialog has already been displayed ghostery_ric_max_default times in the last 30 days.
+            // Called by the SDK when either startImpliedConsentFlow or startExplicitConsentFlow method is called except when the SDK state meets one or more of the following conditions:
+            //   - The Implied Consent dialog has already been displayed ghostery_implied_flow_session_display_max times in the current session.
+            //   - The Implied Consent dialog has already been displayed as required by the ghostery_implied_flow_30day_display_max value (see Ghostery_config.xml for details).
             //   - The Explicit Consent dialog has already been accepted.
             @Override
             public void onNoticeSkipped() {
@@ -104,7 +103,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // Called by the SDK when the Manage Preferences button is clicked in the consent flow dialog.
-            // Return true if your app has displayed the SDK's manage preferences screen, otherwise, return false.
+            // This optionally gives your app an opportunity to display its own screen. In this case your app will
+            // need to manually display the App Notice SDK manage preferences screen by calling the SDK's showManagePreferences method.
+            // Return true if your app has displayed the SDK's manage preferences screen, otherwise,
+            // return false and the SDK will directly display its manage preferences screen.
             @Override
             public boolean onManagePreferencesClicked() {
                 // Open hybrid preferences screen
@@ -120,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
 		// before any trackers are started. In this demo, all trackers are only started from within
 		// the manageTrackers method, and the manageTrackers method is only called from the App Notice
 		// call-back handler. This ensures that trackers are only started with a users prior consent.
-        appNotice = new AppNotice(this, GHOSTERY_COMPANYID, GHOSTERY_CONFIGID, appNotice_callback);
+        appNotice = new AppNotice(this, GHOSTERY_COMPANYID, GHOSTERY_NOTICEID, appNotice_callback);
 
         final String modeImplied = getResources().getString(R.string.mode_implied);
         boolean isImplied = AppData.getString(AppData.APPDATA_CONSENT_FLOW_MODE, modeImplied).equals(modeImplied);
