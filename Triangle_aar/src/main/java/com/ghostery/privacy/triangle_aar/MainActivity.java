@@ -2,9 +2,11 @@ package com.ghostery.privacy.triangle_aar;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -38,14 +40,12 @@ public class MainActivity extends AppCompatActivity {
     // Ghostery variables
     // Note: Use your custom values for the Company ID, Notice ID and all or your tracker IDs. These test values won't work in your environment.
     private static final int GHOSTERY_COMPANYID = 242; // My Ghostery company ID (NOTE: Use your value here)
-    //private static final int GHOSTERY_CONFIGID = 6690; // The Ghostery configuration ID for this app (NOTE: Use your value here) (Implied)
-    private static final int GHOSTERY_CONFIGID = 6691; // The Ghostery configuration ID for this app (NOTE: Use your value here) (Explicit)
+    private static final int GHOSTERY_NOTICEID = 6691; // The Ghostery Notice ID for this app (NOTE: Use your value here)
 
     // Ghostery tracker IDs (NOTE: you will need to define a variable for each tracker you have in your app)
     private static final int GHOSTERY_TRACKERID_ADMOB = 464; // Tracker ID: AdMob
     private static final int GHOSTERY_TRACKERID_CRASHLYTICS = 3140; // Tracker ID: Crashlytics
 
-    private static final boolean GHOSTERY_USEREMOTEVALUES = false; // If true, causes SDK to override local SDK settings with those defined in the Ghostery Admin Portal
     private static AppNotice appNotice; // Ghostery App Notice SDK object
     private AppNotice_Callback appNotice_callback; // Ghostery App Notice callback handler
 	private boolean appRestartRequired; // Ghostery parameter to track if app needs to be restarted after opt-out
@@ -87,9 +87,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            // Called by the SDK when startConsentFlow is called but the SDK state meets one or more of the following conditions:
-            //   - The Implied Consent dialog has already been displayed ghostery_ric_session_max_default times in the current session.
-            //   - The Implied Consent dialog has already been displayed ghostery_ric_max_default times in the last 30 days.
+            // Called by the SDK when either startImpliedConsentFlow or startExplicitConsentFlow method is called except when the SDK state meets one or more of the following conditions:
+            //   - The Implied Consent dialog has already been displayed ghostery_implied_flow_session_display_max times in the current session.
+            //   - The Implied Consent dialog has already been displayed as required by the ghostery_implied_flow_30day_display_max value (see Ghostery_config.xml for details).
             //   - The Explicit Consent dialog has already been accepted.
             @Override
             public void onNoticeSkipped() {
@@ -103,7 +103,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // Called by the SDK when the Manage Preferences button is clicked in the consent flow dialog.
-            // Return true if your app has displayed the SDK's manage preferences screen, otherwise, return false.
+            // This optionally gives your app an opportunity to display its own screen. In this case your app will
+            // need to manually display the App Notice SDK manage preferences screen by calling the SDK's showManagePreferences method.
+            // Return true if your app has displayed the SDK's manage preferences screen, otherwise,
+            // return false and the SDK will directly display its manage preferences screen.
             @Override
             public boolean onManagePreferencesClicked() {
                 // Open hybrid preferences screen
@@ -119,8 +122,15 @@ public class MainActivity extends AppCompatActivity {
 		// before any trackers are started. In this demo, all trackers are only started from within
 		// the manageTrackers method, and the manageTrackers method is only called from the App Notice
 		// call-back handler. This ensures that trackers are only started with a users prior consent.
-        appNotice = new AppNotice(this, GHOSTERY_COMPANYID, GHOSTERY_CONFIGID, GHOSTERY_USEREMOTEVALUES, appNotice_callback);
-        appNotice.startConsentFlow();
+        appNotice = new AppNotice(this, GHOSTERY_COMPANYID, GHOSTERY_NOTICEID, appNotice_callback);
+
+        final String modeImplied = getResources().getString(R.string.mode_implied);
+        boolean isImplied = AppData.getString(AppData.APPDATA_CONSENT_FLOW_MODE, modeImplied).equals(modeImplied);
+        if (isImplied) {
+            appNotice.startImpliedConsentFlow();
+        } else {
+            appNotice.startExplicitConsentFlow();
+        }
     }
 
 	@Override
@@ -236,6 +246,25 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
+            final String modeImplied = getResources().getString(R.string.mode_implied);
+            final String modeExplicit = getResources().getString(R.string.mode_explicit);
+            boolean isImplied = AppData.getString(AppData.APPDATA_CONSENT_FLOW_MODE, modeImplied).equals(modeImplied);
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.settings_title)
+                    .setMessage(getResources().getString(R.string.settings_current_mode) + " " + (isImplied? modeImplied : modeExplicit))
+                    .setIcon(null)
+                    .setPositiveButton(modeImplied, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            AppData.setString(AppData.APPDATA_CONSENT_FLOW_MODE, modeImplied);
+                        }
+                    })
+                    .setNegativeButton(modeExplicit, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            AppData.setString(AppData.APPDATA_CONSENT_FLOW_MODE, modeExplicit);
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
             return true;
         } else if (id == R.id.action_privacyPreferences) {
             appNotice.showManagePreferences();
