@@ -87,9 +87,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            // Called by the SDK when either startImpliedConsentFlow or startExplicitConsentFlow method is called except when the SDK state meets one or more of the following conditions:
-            //   - The Implied Consent dialog has already been displayed ghostery_implied_flow_session_display_max times in the current session.
-            //   - The Implied Consent dialog has already been displayed as required by the ghostery_implied_flow_30day_display_max value (see Ghostery_config.xml for details).
+            // Called by the SDK when either startImpliedConsentFlow or startExplicitConsentFlow method is called, except when the SDK state meets one or more of the following conditions:
+            //   - The Implied Consent dialog:
+            //     1) Has already been displayed the number of times specified by the parameter to the SDK's startImpliedConsentFlow method.
+            //        0: Displays on first start and every notice ID change (recommended).
+            //        1+: Is the max number of times to display the consent screen on start up in a 30-day period.
+            //     2) Has already been displayed ghostery_implied_flow_session_display_max times in the current session.
             //   - The Explicit Consent dialog:
             //     1) In strict mode, consent has already been given;
             //     2) In lenient mode, the consent screen only displayed on a change in the app-notice configuration, including on first start. It is skipped on all others.
@@ -130,8 +133,8 @@ public class MainActivity extends AppCompatActivity {
         boolean isImplied = AppData.getString(AppData.APPDATA_CONSENT_FLOW_MODE, modeImplied).equals(modeImplied);
         if (isImplied) {
             // Start the implied-consent flow (recommended)
-            //   0 displays on first start and every notice ID change (recommended).
-            //   1+ is the max number of times to display the consent screen on start up in a 30-day period.
+            //   0: Displays on first start and every notice ID change (recommended).
+            //   1+: Is the max number of times to display the consent screen on start up in a 30-day period.
             appNotice.startImpliedConsentFlow(0);
         } else {
             // Start the explicit-consent flow in either strict or lenient mode:
