@@ -32,7 +32,7 @@
     <!-- Title text on the privacy preferences screen. -->
     <string name="ghostery_preferences_header">Gestionar preferencias</string>
     <!-- Text of the Opt-in main text on the privacy preferences screen -->
-    <string name="ghostery_preferences_optin_text">Optar por inclusión</string>
+    <string name="ghostery_preferences_optin_text">Optar por Inclusión</string>
     <!-- Text of the Opt-in subtext on the privacy preferences screen -->
     <string name="ghostery_preferences_optin_subtext">Para todos los rastreadores listados a continuación.</string>
     <!-- Text for the select-all control on the privacy preferences screen -->
