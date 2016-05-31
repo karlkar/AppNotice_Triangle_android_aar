@@ -75,7 +75,8 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="@string/pref_in_app_privacy"
-                    android:id="@+id/pref_in_app_privacy" />
+                    android:id="@+id/pref_in_app_privacy"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
