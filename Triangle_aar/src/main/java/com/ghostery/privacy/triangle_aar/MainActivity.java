@@ -87,13 +87,18 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            // Called by the SDK when either startImpliedConsentFlow or startExplicitConsentFlow method is called except when the SDK state meets one or more of the following conditions:
-            //   - The Implied Consent dialog has already been displayed ghostery_implied_flow_session_display_max times in the current session.
-            //   - The Implied Consent dialog has already been displayed as required by the ghostery_implied_flow_30day_display_max value (see Ghostery_config.xml for details).
-            //   - The Explicit Consent dialog has already been accepted.
+            // Called by the SDK when either startImpliedConsentFlow or startExplicitConsentFlow method is called, except when the SDK state meets one or more of the following conditions:
+            //   - The Implied Consent dialog:
+            //     1) Has already been displayed the number of times specified by the parameter to the SDK's startImpliedConsentFlow method.
+            //        0: Displays on first start and every notice ID change (recommended).
+            //        1+: Is the max number of times to display the consent screen on start up in a 30-day period.
+            //     2) Has already been displayed ghostery_implied_flow_session_display_max times in the current session.
+            //   - The Explicit Consent dialog:
+            //     1) In strict mode, consent has already been given;
+            //     2) In lenient mode, the consent screen only displayed on a change in the app-notice configuration, including on first start. It is skipped on all others.
             @Override
-            public void onNoticeSkipped() {
-                manageTrackers(appNotice.getTrackerPreferences());
+            public void onNoticeSkipped(boolean isAccepted, HashMap<Integer, Boolean> trackerHashMap) {
+                manageTrackers(trackerHashMap);
             }
 
             // Called by the SDK when the app-user is finished managing their privacy preferences on the Manage Preferences screen and navigates back your app
@@ -117,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
 
         };
 
-        // Instantiate and start the Ghostery consent flow:
+        // Instantiate the App Notice SDK and start either the implied or explicit consent flow:
 		// To be in compliance with honoring a user's prior consent, you must start this consent flow
 		// before any trackers are started. In this demo, all trackers are only started from within
 		// the manageTrackers method, and the manageTrackers method is only called from the App Notice
@@ -127,9 +132,15 @@ public class MainActivity extends AppCompatActivity {
         final String modeImplied = getResources().getString(R.string.mode_implied);
         boolean isImplied = AppData.getString(AppData.APPDATA_CONSENT_FLOW_MODE, modeImplied).equals(modeImplied);
         if (isImplied) {
-            appNotice.startImpliedConsentFlow();
+            // Start the implied-consent flow (recommended)
+            //   0: Displays on first start and every notice ID change (recommended).
+            //   1+: Is the max number of times to display the consent screen on start up in a 30-day period.
+            appNotice.startImpliedConsentFlow(0);
         } else {
-            appNotice.startExplicitConsentFlow();
+            // Start the explicit-consent flow in either strict or lenient mode:
+            //   true = use strict mode (end user must click Accept to continue).
+            //   false = use lenient mode (on decline, the consent flow screen is only displayed again when the notice ID changes).
+            appNotice.startExplicitConsentFlow(true);
         }
     }
 
