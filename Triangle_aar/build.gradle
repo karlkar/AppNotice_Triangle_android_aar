@@ -27,7 +27,7 @@ android {
         applicationId "com.ghostery.privacy.triangle_aar"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 41
+        versionCode 42
         versionName "2.1.0"
     }
     buildTypes {
