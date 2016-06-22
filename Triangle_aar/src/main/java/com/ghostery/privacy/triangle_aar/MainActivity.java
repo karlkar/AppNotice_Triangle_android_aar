@@ -79,8 +79,7 @@ public class MainActivity extends AppCompatActivity {
                     manageTrackers(appNotice_privacyPreferences);
                 } else {
                     try {
-                        DeclineConfirmation_DialogFragment dialog = new DeclineConfirmation_DialogFragment();
-                        dialog.show(getFragmentManager(), "DeclineConfirmation_DialogFragment");
+                        showMessage(getString(R.string.declineConfirmDialog_title), getString(R.string.declineConfirmDialog_message));
                     } catch (IllegalStateException e) {
                         Log.e(TAG, "Error while trying to display the decline-confirmation dialog.", e);
                     }
@@ -150,8 +149,7 @@ public class MainActivity extends AppCompatActivity {
 
 		// If any trackers have been opted-out of and need an app restart, handle user notification here
 		if (appRestartRequired) {
-			Restart_DialogFragment dialog = new Restart_DialogFragment();
-			dialog.show(getFragmentManager(), "Restart_DialogFragment");
+            showMessage(getString(R.string.restartAppDialog_title), getString(R.string.restartAppDialog_message));
 			appRestartRequired = false; // Don't notify again until preferences have been changed again
 		}
 	}
@@ -298,4 +296,21 @@ public class MainActivity extends AppCompatActivity {
     public static AppNotice getAppNotice() {
         return appNotice;
     }
+
+    private void showMessage(String title, String message) {
+//        String prefResults = "";
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setCancelable(false);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
 }
