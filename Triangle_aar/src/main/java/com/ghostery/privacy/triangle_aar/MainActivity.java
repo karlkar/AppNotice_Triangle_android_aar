@@ -106,19 +106,6 @@ public class MainActivity extends AppCompatActivity {
                 manageTrackers(trackerHashMap);
             }
 
-            // Called by the SDK when the Manage Preferences button is clicked in the consent flow dialog.
-            // This optionally gives your app an opportunity to display its own screen. In this case your app will
-            // need to manually display the App Notice SDK manage preferences screen by calling the SDK's showManagePreferences method.
-            // Return true if your app has displayed the SDK's manage preferences screen, otherwise,
-            // return false and the SDK will directly display its manage preferences screen.
-            @Override
-            public boolean onManagePreferencesClicked() {
-                // Open hybrid preferences screen
-                Intent i = new Intent(getBaseContext(), HybridPrivacySettings.class);
-                startActivity(i);
-                return true;  // Handled
-            }
-
         };
 
         // Instantiate the App Notice SDK and start either the implied or explicit consent flow:
@@ -277,11 +264,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         } else if (id == R.id.action_privacyPreferences) {
             appNotice.showManagePreferences();
-            return true;
-        } else if (id == R.id.action_hybridPrivacyPreferences) {
-            // Open hybrid preferences screen
-            Intent i = new Intent(getBaseContext(), HybridPrivacySettings.class);
-            startActivity(i);
             return true;
         } else if (id == R.id.action_resetAppNoticeSdk) {
             appNotice.resetSDK();

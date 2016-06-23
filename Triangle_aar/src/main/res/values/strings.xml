@@ -2,8 +2,7 @@
     <string name="app_name">.Triangle_aar</string>
 
     <string name="action_settings">Settings</string>
-    <string name="action_privacyPreferences">Direct Privacy Preferences</string>
-    <string name="action_hybridPrivacyPreferences">Hybrid Privacy Preferences</string>
+    <string name="action_privacyPreferences">Privacy Preferences</string>
     <string name="action_resetAppNoticeSdk">Reset App Notice SDK</string>
     <string name="action_forceCrash">Force Crash</string>
     <string name="action_forceCrash_message">Intentional app crash to test Crashlytics</string>
@@ -21,13 +20,6 @@
     <string name="restartAppDialog_title">Restart This App</string>
     <string name="restartAppDialog_message">You must close and restart this app to disable all requested opt-outs. These trackers will continue to function in this app session.</string>
     <string name="restartAppDialog_posBtn">OK</string>
-
-    <!-- Strings related to Settings -->
-    <string name="title_activity_hybrid_privacy_settings">Legal and Privacy</string>
-    <string name="pref_terms_of_use">Terms of Use</string>
-    <string name="pref_privacy_policy">Privacy Policy</string>
-    <string name="pref_web_based_privacy">Web-based Privacy</string>
-    <string name="pref_in_app_privacy">In-app Privacy</string>
 
     <!-- -
         This is an ad unit ID for a banner test ad. Replace with your own banner ad unit id.
