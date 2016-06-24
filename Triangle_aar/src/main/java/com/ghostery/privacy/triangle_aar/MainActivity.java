@@ -93,8 +93,7 @@ public class MainActivity extends AppCompatActivity {
             //        1+: Is the max number of times to display the consent screen on start up in a 30-day period.
             //     2) Has already been displayed ghostery_implied_flow_session_display_max times in the current session.
             //   - The Explicit Consent dialog:
-            //     1) In strict mode, consent has already been given;
-            //     2) In lenient mode, the consent screen only displayed on a change in the app-notice configuration, including on first start. It is skipped on all others.
+            //     1) Consent has already been given.
             @Override
             public void onNoticeSkipped(boolean isAccepted, HashMap<Integer, Boolean> trackerHashMap) {
                 manageTrackers(trackerHashMap);
@@ -123,10 +122,8 @@ public class MainActivity extends AppCompatActivity {
             //   1+: Is the max number of times to display the consent screen on start up in a 30-day period.
             appNotice.startImpliedConsentFlow(0);
         } else {
-            // Start the explicit-consent flow in either strict or lenient mode:
-            //   true = use strict mode (end user must click Accept to continue).
-            //   false = use lenient mode (on decline, the consent flow screen is only displayed again when the notice ID changes).
-            appNotice.startExplicitConsentFlow(true);
+            // Start the explicit-consent flow:
+            appNotice.startExplicitConsentFlow();
         }
     }
 
