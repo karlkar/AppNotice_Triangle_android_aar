@@ -21,6 +21,12 @@
     <string name="restartAppDialog_message">You must close and restart this app to disable all requested opt-outs. These trackers will continue to function in this app session.</string>
     <string name="restartAppDialog_posBtn">OK</string>
 
+    <!-- Ghostery App Notice SDK Customization -->
+    <!-- Text of the title in both the Explicit Consent and Implied Consent screens. -->
+    <string name="ghostery_dialog_header_text">Triangle Cares About Your Privacy</string>
+    <!-- Text of the description section near the top of the privacy preferences screen. -->
+    <string name="ghostery_preferences_description">Triangle uses the following technologies to optimize your experience with this app. Tap to learn more or disable any non-essential tools below.</string>
+
     <!-- -
         This is an ad unit ID for a banner test ad. Replace with your own banner ad unit id.
         For more information, see https://support.google.com/admob/answer/3052638
