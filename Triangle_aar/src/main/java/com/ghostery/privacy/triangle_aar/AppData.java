@@ -7,8 +7,6 @@ package com.ghostery.privacy.triangle_aar;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.ghostery.privacy.appnoticesdk.AppNotice;
-
 import java.util.Map;
 
 /**
@@ -26,7 +24,7 @@ public class AppData {
 
     public static SharedPreferences getSessionInfo(){
         if( sharedPreferences == null ) {
-            Context appContext = AppNotice.getAppContext();
+            Context appContext = App.getContext();
             String packageName = appContext.getPackageName();
             sharedPreferences = appContext.getSharedPreferences(packageName + APPDATA_FILENAME_END, appContext.MODE_PRIVATE);
             if (!sharedPreferences.contains(APPDATA_VERSION)) {
