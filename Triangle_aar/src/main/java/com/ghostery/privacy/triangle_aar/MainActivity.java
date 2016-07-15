@@ -7,7 +7,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -77,11 +76,8 @@ public class MainActivity extends AppCompatActivity {
                 if (isAccepted) {
                     manageTrackers(appNotice_privacyPreferences);
                 } else {
-                    try {
-                        showMessage(getString(R.string.declineConfirmDialog_title), getString(R.string.declineConfirmDialog_message));
-                    } catch (IllegalStateException e) {
-                        Log.e(TAG, "Error while trying to display the decline-confirmation dialog.", e);
-                    }
+                    // Toast invalid response state
+                    Toast.makeText(activity, R.string.decline_state_error, Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -281,8 +277,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showMessage(String title, String message) {
-//        String prefResults = "";
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(title);
         builder.setMessage(message);

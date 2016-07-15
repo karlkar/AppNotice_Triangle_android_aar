@@ -10,11 +10,7 @@
     <string name="settings_current_mode">Current mode:</string>
     <string name="mode_implied">Implied</string>
     <string name="mode_explicit">Explicit</string>
-
-    <!-- Decline Confirmation dialog -->
-    <string name="declineConfirmDialog_title">Declined Consent</string>
-    <string name="declineConfirmDialog_message">To enjoy the full functionality of this app, you must either upgrade to the paid version or accept the privacy preferences in this version. Please restart this app if you would like to accept. This app will now continue with limited functionality.</string>
-    <string name="declineConfirmDialog_posBtn">OK</string>
+    <string name="decline_state_error">Error: This is an invalid response state.</string>
 
     <!-- Restart-app dialog -->
     <string name="restartAppDialog_title">Restart This App</string>
