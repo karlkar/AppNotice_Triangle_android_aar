@@ -3,12 +3,10 @@ package com.ghostery.privacy.triangle_aar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -71,31 +69,26 @@ public class MainActivity extends AppCompatActivity {
         // Create the callback handler for the App Notice SDK
         appNotice_callback = new AppNotice_Callback() {
 
-            // Called by the SDK when the user accepts or declines tracking from one of the consent flow dialogs
+            // Called by the SDK when the user accepts or declines tracking from one of the consent notice screens
             @Override
             public void onOptionSelected(boolean isAccepted, HashMap<Integer, Boolean> appNotice_privacyPreferences) {
                 // Handle your response
                 if (isAccepted) {
                     manageTrackers(appNotice_privacyPreferences);
                 } else {
-                    try {
-                        DeclineConfirmation_DialogFragment dialog = new DeclineConfirmation_DialogFragment();
-                        dialog.show(getFragmentManager(), "DeclineConfirmation_DialogFragment");
-                    } catch (IllegalStateException e) {
-                        Log.e(TAG, "Error while trying to display the decline-confirmation dialog.", e);
-                    }
+                    // Toast invalid response state
+                    Toast.makeText(activity, R.string.decline_state_error, Toast.LENGTH_LONG).show();
                 }
             }
 
             // Called by the SDK when either startImpliedConsentFlow or startExplicitConsentFlow method is called, except when the SDK state meets one or more of the following conditions:
-            //   - The Implied Consent dialog:
+            //   - The Implied Consent screen:
             //     1) Has already been displayed the number of times specified by the parameter to the SDK's startImpliedConsentFlow method.
             //        0: Displays on first start and every notice ID change (recommended).
             //        1+: Is the max number of times to display the consent screen on start up in a 30-day period.
             //     2) Has already been displayed ghostery_implied_flow_session_display_max times in the current session.
-            //   - The Explicit Consent dialog:
-            //     1) In strict mode, consent has already been given;
-            //     2) In lenient mode, the consent screen only displayed on a change in the app-notice configuration, including on first start. It is skipped on all others.
+            //   - The Explicit Consent screen:
+            //     1) Consent has already been given.
             @Override
             public void onNoticeSkipped(boolean isAccepted, HashMap<Integer, Boolean> trackerHashMap) {
                 manageTrackers(trackerHashMap);
@@ -107,40 +100,32 @@ public class MainActivity extends AppCompatActivity {
                 manageTrackers(trackerHashMap);
             }
 
-            // Called by the SDK when the Manage Preferences button is clicked in the consent flow dialog.
-            // This optionally gives your app an opportunity to display its own screen. In this case your app will
-            // need to manually display the App Notice SDK manage preferences screen by calling the SDK's showManagePreferences method.
-            // Return true if your app has displayed the SDK's manage preferences screen, otherwise,
-            // return false and the SDK will directly display its manage preferences screen.
-            @Override
-            public boolean onManagePreferencesClicked() {
-                // Open hybrid preferences screen
-                Intent i = new Intent(getBaseContext(), HybridPrivacySettings.class);
-                startActivity(i);
-                return true;  // Handled
-            }
-
         };
-
-        // Instantiate the App Notice SDK and start either the implied or explicit consent flow:
-		// To be in compliance with honoring a user's prior consent, you must start this consent flow
-		// before any trackers are started. In this demo, all trackers are only started from within
-		// the manageTrackers method, and the manageTrackers method is only called from the App Notice
-		// call-back handler. This ensures that trackers are only started with a users prior consent.
-        appNotice = new AppNotice(this, GHOSTERY_COMPANYID, GHOSTERY_NOTICEID, appNotice_callback);
 
         final String modeImplied = getResources().getString(R.string.mode_implied);
         boolean isImplied = AppData.getString(AppData.APPDATA_CONSENT_FLOW_MODE, modeImplied).equals(modeImplied);
         if (isImplied) {
+            // Example of instantiating the App Notice SDK in implied mode.
+            // To be in compliance with honoring a user's prior consent, you must start this consent flow
+            // before any trackers are started. In this demo, all trackers are only started from within
+            // the manageTrackers method, and the manageTrackers method is only called from the App Notice
+            // call-back handler. This ensures that trackers are only started with a users prior consent.
+            appNotice = new AppNotice(this, GHOSTERY_COMPANYID, GHOSTERY_NOTICEID, appNotice_callback);
+
             // Start the implied-consent flow (recommended)
             //   0: Displays on first start and every notice ID change (recommended).
             //   1+: Is the max number of times to display the consent screen on start up in a 30-day period.
-            appNotice.startImpliedConsentFlow(0);
+            appNotice.startConsentFlow(0);
         } else {
-            // Start the explicit-consent flow in either strict or lenient mode:
-            //   true = use strict mode (end user must click Accept to continue).
-            //   false = use lenient mode (on decline, the consent flow screen is only displayed again when the notice ID changes).
-            appNotice.startExplicitConsentFlow(true);
+            // Example of instantiating the App Notice SDK in explicit mode.
+            // To be in compliance with honoring a user's prior consent, you must start this consent flow
+            // before any trackers are started. In this demo, all trackers are only started from within
+            // the manageTrackers method, and the manageTrackers method is only called from the App Notice
+            // call-back handler. This ensures that trackers are only started with a users prior consent.
+            appNotice = new AppNotice(this, GHOSTERY_COMPANYID, GHOSTERY_NOTICEID, appNotice_callback, false);
+
+            // Start the explicit-consent flow:
+            appNotice.startConsentFlow();
         }
     }
 
@@ -150,49 +135,48 @@ public class MainActivity extends AppCompatActivity {
 
 		// If any trackers have been opted-out of and need an app restart, handle user notification here
 		if (appRestartRequired) {
-			Restart_DialogFragment dialog = new Restart_DialogFragment();
-			dialog.show(getFragmentManager(), "Restart_DialogFragment");
+            showMessage(getString(R.string.restartAppDialog_title), getString(R.string.restartAppDialog_message));
 			appRestartRequired = false; // Don't notify again until preferences have been changed again
 		}
 	}
 
 	private void manageTrackers(HashMap<Integer, Boolean> trackerHashMap) {
-		appRestartRequired = false;	// Assume the app doesn't need to be restarted to manage opt-outs
+        appRestartRequired = false;    // Assume the app doesn't need to be restarted to manage opt-outs
 
         if (trackerHashMap.size() > 0) {
             // == Manage AdMob ======================================
-			// This demonstrates how to manage a tracker that can both be enabled and disabled in a
-			// single session. The AdMob tracker is turned on and off as directed by a user's
-			// privacy preferences.
+            // This demonstrates how to manage a tracker that can both be enabled and disabled in a
+            // single session. The AdMob tracker is turned on and off as directed by a user's
+            // privacy preferences.
             Boolean adMobEnabled = trackerHashMap.get(GHOSTERY_TRACKERID_ADMOB) == null? false : trackerHashMap.get(GHOSTERY_TRACKERID_ADMOB);
 
             if (adMobEnabled) {
-				boolean inEmulator = Build.BRAND.toLowerCase().startsWith("generic");
+                boolean inEmulator = Build.BRAND.toLowerCase().startsWith("generic");
 
-				// Start the AdMob tracker as specified by the user
-				// (Note: If there were a way to detect that this tracker were already running, we
-				// could avoid restarting the tracker in that case.)
-				AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
-				if (isTestingAds) {
-					if (inEmulator) {
-						adRequestBuilder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
-					} else {
-						adRequestBuilder.addTestDevice("8E86E615D3646127F9A6DE11B6E8C533");
-					}
-				}
+                // Start the AdMob tracker as specified by the user
+                // (Note: If there were a way to detect that this tracker were already running, we
+                // could avoid restarting the tracker in that case.)
+                AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
+                if (isTestingAds) {
+                    if (inEmulator) {
+                        adRequestBuilder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
+                    } else {
+                        adRequestBuilder.addTestDevice("8E86E615D3646127F9A6DE11B6E8C533");
+                    }
+                }
                 AdRequest adRequest = adRequestBuilder.build();
 
                 adView.setVisibility(View.VISIBLE);
-				adView.bringToFront();
-				adView.loadAd(adRequest);
+                adView.bringToFront();
+                adView.loadAd(adRequest);
 
                 // Toast the AdMob showing message (optional)
                 Toast.makeText(this, TOAST_ADMOB_ENABLE, Toast.LENGTH_LONG).show();
             } else {
-				// Stop the AdMob tracker as specified by the user:
-				// To honor a user's withdrawn consent, if a tracker can be turned off or disabled,
-				// that tracker must be turned off in a way that it is no longer tracking the user
-				//  in this session and future sessions.
+                // Stop the AdMob tracker as specified by the user:
+                // To honor a user's withdrawn consent, if a tracker can be turned off or disabled,
+                // that tracker must be turned off in a way that it is no longer tracking the user
+                //  in this session and future sessions.
                 adView.pause();
                 adView.setVisibility(View.GONE);
 
@@ -201,45 +185,43 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-			// == Manage Crashlytics ================================
-			// This demonstrates how to manage a tracker that can enabled but not disabled in a
-			// single session. The Crashlytics tracker is turned on as directed by a user's
-			// privacy preferences. But when a user requests that this tracker be turned off in the
-			// privacy preferences, this demonstrates one way to notify that user to restart
-			// the app.
+            // == Manage Crashlytics ================================
+            // This demonstrates how to manage a tracker that can enabled but not disabled in a
+            // single session. The Crashlytics tracker is turned on as directed by a user's
+            // privacy preferences. But when a user requests that this tracker be turned off in the
+            // privacy preferences, this demonstrates one way to notify that user to restart
+            // the app.
             Boolean crashlyticsEnabled = trackerHashMap.get(GHOSTERY_TRACKERID_CRASHLYTICS) == null? false : trackerHashMap.get(GHOSTERY_TRACKERID_CRASHLYTICS);
-			if (Fabric.isInitialized()) {	// Crashlytics is running in this session
-				if (crashlyticsEnabled) {
-					// Toast the Crashlytics is enabled message (optional)
-					Toast.makeText(this, TOAST_CRASHLYTICS_ENABLE, Toast.LENGTH_LONG).show();
-				} else {
-					// Remember to notify the user that an app restart is required to disable this tracker:
-					// To honor a user's withdrawn consent, if a tracker can NOT be turned off or
-					// disabled in the current session, you must notify the user that they will
-					// continue to be tracked until the app is restarted. Then when the app is
-					// restarted, don't start that tracker.
-					appRestartRequired = true;
-				}
-			} else { // Crashlytics has never been started in this session
-				if (crashlyticsEnabled) {
-					// Start the Crashlytics tracker as specified by the user
-					Fabric.with(this, new Crashlytics());
+            if (Fabric.isInitialized()) {    // Crashlytics is running in this session
+                if (crashlyticsEnabled) {
+                    // Toast the Crashlytics is enabled message (optional)
+                    Toast.makeText(this, TOAST_CRASHLYTICS_ENABLE, Toast.LENGTH_LONG).show();
+                } else {
+                    // Remember to notify the user that an app restart is required to disable this tracker:
+                    // To honor a user's withdrawn consent, if a tracker can NOT be turned off or
+                    // disabled in the current session, you must notify the user that they will
+                    // continue to be tracked until the app is restarted. Then when the app is
+                    // restarted, don't start that tracker.
+                    appRestartRequired = true;
+                }
+            } else { // Crashlytics has never been started in this session
+                if (crashlyticsEnabled) {
+                    // Start the Crashlytics tracker as specified by the user
+                    Fabric.with(this, new Crashlytics());
 
-					// Toast the Crashlytics is enabled message (optional)
-					Toast.makeText(this, TOAST_CRASHLYTICS_ENABLE, Toast.LENGTH_LONG).show();
-				} else {
-					// Do nothing: Crashlytics is disabled and not running
+                    // Toast the Crashlytics is enabled message (optional)
+                    Toast.makeText(this, TOAST_CRASHLYTICS_ENABLE, Toast.LENGTH_LONG).show();
+                } else {
+                    // Do nothing: Crashlytics is disabled and not running
 
-					// Toast the Crashlytics is disabled message (optional)
-					Toast.makeText(this, TOAST_CRASHLYTICS_DISABLE, Toast.LENGTH_LONG).show();
-				}
-			}
+                    // Toast the Crashlytics is disabled message (optional)
+                    Toast.makeText(this, TOAST_CRASHLYTICS_DISABLE, Toast.LENGTH_LONG).show();
+                }
+            }
 
         } else {
             Toast.makeText(activity, TOAST_TEXT_NOPREFS, Toast.LENGTH_LONG).show();
         }
-
-
     }
 
     @Override
@@ -280,11 +262,6 @@ public class MainActivity extends AppCompatActivity {
         } else if (id == R.id.action_privacyPreferences) {
             appNotice.showManagePreferences();
             return true;
-        } else if (id == R.id.action_hybridPrivacyPreferences) {
-            // Open hybrid preferences screen
-            Intent i = new Intent(getBaseContext(), HybridPrivacySettings.class);
-            startActivity(i);
-            return true;
         } else if (id == R.id.action_resetAppNoticeSdk) {
             appNotice.resetSDK();
             return true;
@@ -298,4 +275,19 @@ public class MainActivity extends AppCompatActivity {
     public static AppNotice getAppNotice() {
         return appNotice;
     }
+
+    private void showMessage(String title, String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setCancelable(false);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
 }

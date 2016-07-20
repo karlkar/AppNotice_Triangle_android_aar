@@ -2,8 +2,7 @@
     <string name="app_name">.Triangle_aar</string>
 
     <string name="action_settings">Settings</string>
-    <string name="action_privacyPreferences">Direct Privacy Preferences</string>
-    <string name="action_hybridPrivacyPreferences">Hybrid Privacy Preferences</string>
+    <string name="action_privacyPreferences">Privacy Preferences</string>
     <string name="action_resetAppNoticeSdk">Reset App Notice SDK</string>
     <string name="action_forceCrash">Force Crash</string>
     <string name="action_forceCrash_message">Intentional app crash to test Crashlytics</string>
@@ -11,23 +10,18 @@
     <string name="settings_current_mode">Current mode:</string>
     <string name="mode_implied">Implied</string>
     <string name="mode_explicit">Explicit</string>
-
-    <!-- Decline Confirmation dialog -->
-    <string name="declineConfirmDialog_title">Declined Consent</string>
-    <string name="declineConfirmDialog_message">To enjoy the full functionality of this app, you must either upgrade to the paid version or accept the privacy preferences in this version. Please restart this app if you would like to accept. This app will now continue with limited functionality.</string>
-    <string name="declineConfirmDialog_posBtn">OK</string>
+    <string name="decline_state_error">Error: This is an invalid response state.</string>
 
     <!-- Restart-app dialog -->
     <string name="restartAppDialog_title">Restart This App</string>
     <string name="restartAppDialog_message">You must close and restart this app to disable all requested opt-outs. These trackers will continue to function in this app session.</string>
     <string name="restartAppDialog_posBtn">OK</string>
 
-    <!-- Strings related to Settings -->
-    <string name="title_activity_hybrid_privacy_settings">Legal and Privacy</string>
-    <string name="pref_terms_of_use">Terms of Use</string>
-    <string name="pref_privacy_policy">Privacy Policy</string>
-    <string name="pref_web_based_privacy">Web-based Privacy</string>
-    <string name="pref_in_app_privacy">In-app Privacy</string>
+    <!-- Ghostery App Notice SDK Customization -->
+    <!-- Text of the title in both the Explicit Consent and Implied Consent screens. -->
+    <string name="ghostery_dialog_header_text">Triangle Cares About Your Privacy</string>
+    <!-- Text of the description section near the top of the privacy preferences screen. -->
+    <string name="ghostery_preferences_description">Triangle uses the following technologies to optimize your experience with this app. Tap to learn more or disable any non-essential tools below.</string>
 
     <!-- -
         This is an ad unit ID for a banner test ad. Replace with your own banner ad unit id.
