@@ -12,9 +12,6 @@ apply plugin: 'io.fabric'
 
 repositories {
     mavenCentral()
-    flatDir {
-        dirs 'libs' // Allow the .aar file to be found in the libs folder
-    }
     maven { url 'https://maven.fabric.io/public' }
 }
 
@@ -27,8 +24,8 @@ android {
         applicationId "com.ghostery.privacy.triangle_aar"
         minSdkVersion 14
         targetSdkVersion 24
-        versionCode 49
-        versionName "2.1.0"
+        versionCode 50
+        versionName "2.2.0"
     }
     buildTypes {
         release {
@@ -42,7 +39,7 @@ android {
 }
 
 dependencies {
-    compile 'com.ghostery.privacy.appnoticesdk:AppNoticeSDK:2.1.0'
+    compile 'com.ghostery.privacy.appnoticesdk:AppNoticeSDK:2.2.0'
     compile('com.crashlytics.sdk.android:crashlytics:2.5.2@aar') {
         transitive = true;
     }

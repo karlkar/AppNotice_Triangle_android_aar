@@ -12,10 +12,22 @@
         android:layout_marginTop="20dp"
         android:src="@drawable/logo" />
 
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/sdk_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageView"
+        android:text="SDK Version"
+        android:layout_centerHorizontal="true" />
+
     <!-- view for AdMob Banner Ad -->
-    <com.google.android.gms.ads.AdView android:id="@+id/adView" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true" ads:adSize="BANNER"
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
         ads:adUnitId="@string/banner_ad_unit_id" />
 
 </RelativeLayout>

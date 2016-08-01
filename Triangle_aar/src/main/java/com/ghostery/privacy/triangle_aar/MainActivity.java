@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatTextView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -56,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Context context = App.getContext();
         activity = this;
+
+        AppCompatTextView sdkVersionTextView = (AppCompatTextView)findViewById(R.id.sdk_version);
+        sdkVersionTextView.setText("SDK v." + AppNotice.sdkVersionName + "." + String.valueOf(AppNotice.sdkVersionCode));
 
         // Get the AdMob banner view and set an ad-loaded listner
         adView = (AdView) findViewById(R.id.adView);
