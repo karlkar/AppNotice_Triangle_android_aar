@@ -17,14 +17,14 @@ repositories {
 
 android {
     compileSdkVersion 24
-    buildToolsVersion '24.0.0'
+    buildToolsVersion '24.0.1'
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
         applicationId "com.ghostery.privacy.triangle_aar"
         minSdkVersion 14
         targetSdkVersion 24
-        versionCode 52
+        versionCode 53
         versionName "2.2.0"
     }
     buildTypes {
@@ -38,14 +38,20 @@ android {
     }
 }
 
+task clean(type: Exec) {
+    ext.lockhunter = '\"C:\\Apps\\LockHunter\\LockHunter.exe\"'
+    def buildDir = file(new File("build"))
+    commandLine 'cmd', "$lockhunter", '/delete', '/silent', buildDir
+}
+
 dependencies {
-    compile 'com.ghostery.privacy.appnoticesdk:AppNoticeSDK:2.2.0-rc3'
+    compile 'com.ghostery.privacy.appnoticesdk:AppNoticeSDK:2.2.0-rc5'
     compile('com.crashlytics.sdk.android:crashlytics:2.5.2@aar') {
         transitive = true;
     }
-    compile 'com.android.support:appcompat-v7:24.0.0'
-    compile 'com.android.support:design:24.0.0'
-    compile 'com.google.android.gms:play-services-ads:8.4.0'
+    compile 'com.android.support:appcompat-v7:24.1.1'
+    compile 'com.android.support:design:24.1.1'
+    compile 'com.google.android.gms:play-services-ads:9.4.0'
     compile('com.crashlytics.sdk.android:answers:1.3.6@aar') {
         transitive = true;
     }
