@@ -38,8 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Ghostery variables
     // Note: Use your custom values for the Company ID, Notice ID and all or your tracker IDs. These test values won't work in your environment.
-    private static final int GHOSTERY_COMPANYID = 242; // My Ghostery company ID (NOTE: Use your value here)
-    private static final int GHOSTERY_NOTICEID = 6691; // The Ghostery Notice ID for this app (NOTE: Use your value here)
+    private static final String GHOSTERY_TOKEN = "baefa2fb063b4273a636591f8535dcf3"; // My Ghostery App Notice token (NOTE: Use your value here)
 
     // Ghostery tracker IDs (NOTE: you will need to define a variable for each tracker you have in your app)
     private static final int GHOSTERY_TRACKERID_ADMOB = 464; // Tracker ID: AdMob
@@ -114,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
             // before any trackers are started. In this demo, all trackers are only started from within
             // the manageTrackers method, and the manageTrackers method is only called from the App Notice
             // call-back handler. This ensures that trackers are only started with a users prior consent.
-            appNotice = new AppNotice(this, GHOSTERY_COMPANYID, GHOSTERY_NOTICEID, appNotice_callback);
+            appNotice = new AppNotice(this, GHOSTERY_TOKEN, appNotice_callback);
 
             // Start the implied-consent flow (recommended)
             //   0: Displays on first start and every notice ID change (recommended).
@@ -126,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
             // before any trackers are started. In this demo, all trackers are only started from within
             // the manageTrackers method, and the manageTrackers method is only called from the App Notice
             // call-back handler. This ensures that trackers are only started with a users prior consent.
-            appNotice = new AppNotice(this, GHOSTERY_COMPANYID, GHOSTERY_NOTICEID, appNotice_callback, false);
+            appNotice = new AppNotice(this, GHOSTERY_TOKEN, appNotice_callback, false);
 
             // Start the explicit-consent flow:
             appNotice.startConsentFlow();
