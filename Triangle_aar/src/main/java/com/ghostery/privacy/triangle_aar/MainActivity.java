@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
             // call-back handler. This ensures that trackers are only started with a users prior consent.
             appNotice = new AppNotice(this, GHOSTERY_TOKEN, appNotice_callback, false);
 
-            // Start the explicit-consent flow:
+            // Start the consent flow:
             appNotice.startConsentFlow();
         }
     }
