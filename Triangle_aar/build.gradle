@@ -24,7 +24,7 @@ android {
         applicationId "com.ghostery.privacy.triangle_aar"
         minSdkVersion 14
         targetSdkVersion 24
-        versionCode 55
+        versionCode 56
         versionName "2.2.0"
     }
     buildTypes {
@@ -45,7 +45,7 @@ task clean(type: Exec) {
 }
 
 dependencies {
-    compile 'com.ghostery.privacy.appnoticesdk:AppNoticeSDK:2.2.0-rc8'
+    compile 'com.ghostery.privacy.appnoticesdk:AppNoticeSDK:2.2.0-rc9'
     compile('com.crashlytics.sdk.android:crashlytics:2.5.2@aar') {
         transitive = true;
     }
