@@ -14,8 +14,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
-import com.ghostery.privacy.appnoticesdk.AppNotice;
-import com.ghostery.privacy.appnoticesdk.callbacks.AppNotice_Callback;
+import com.evidon.privacy.appnoticesdk.AppNotice;
+import com.evidon.privacy.appnoticesdk.callbacks.AppNotice_Callback;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
