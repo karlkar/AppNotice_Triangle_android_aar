@@ -1,4 +1,4 @@
-package com.ghostery.privacy.triangle_aar;
+package com.evidon.privacy.triangle_aar;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,8 +14,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
-import com.ghostery.privacy.appnoticesdk.AppNotice;
-import com.ghostery.privacy.appnoticesdk.callbacks.AppNotice_Callback;
+import com.evidon.privacy.appnoticesdk.AppNotice;
+import com.evidon.privacy.appnoticesdk.callbacks.AppNotice_Callback;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -36,17 +36,17 @@ public class MainActivity extends AppCompatActivity {
     private static final String TOAST_CRASHLYTICS_DISABLE = "Crashlytics is disabled.";
     private static final String TOAST_TEXT_NOPREFS = "No privacy preferences returned.";
 
-    // Ghostery variables
+    // Evidon variables
     // Note: Use your custom values for the Company ID, Notice ID and all or your tracker IDs. These test values won't work in your environment.
-    private static final String GHOSTERY_TOKEN = "baefa2fb063b4273a636591f8535dcf3"; // My Ghostery App Notice token (NOTE: Use your value here)
+    private static final String EVIDON_TOKEN = "bff0f04910354fb8a042650840056c9d"; // My Evidon App Notice token (NOTE: Use your value here)
 
-    // Ghostery tracker IDs (NOTE: you will need to define a variable for each tracker you have in your app)
-    private static final int GHOSTERY_TRACKERID_ADMOB = 464; // Tracker ID: AdMob
-    private static final int GHOSTERY_TRACKERID_CRASHLYTICS = 3140; // Tracker ID: Crashlytics
+    // Evidon tracker IDs (NOTE: you will need to define a variable for each tracker you have in your app)
+    private static final int EVIDON_TRACKERID_ADMOB = 464; // Tracker ID: AdMob
+    private static final int EVIDON_TRACKERID_CRASHLYTICS = 3140; // Tracker ID: Crashlytics
 
-    private static AppNotice appNotice; // Ghostery App Notice SDK object
-    private AppNotice_Callback appNotice_callback; // Ghostery App Notice callback handler
-	private boolean appRestartRequired; // Ghostery parameter to track if app needs to be restarted after opt-out
+    private static AppNotice appNotice; // Evidon App Notice SDK object
+    private AppNotice_Callback appNotice_callback; // Evidon App Notice callback handler
+	private boolean appRestartRequired; // Evidon parameter to track if app needs to be restarted after opt-out
     private AdView adView;
 	private final boolean isTestingAds = true; // Switch to make it easy on changing ad-testing mode
 
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
             //     1) Has already been displayed the number of times specified by the parameter to the SDK's startImpliedConsentFlow method.
             //        0: Displays on first start and every notice ID change (recommended).
             //        1+: Is the max number of times to display the consent screen on start up in a 30-day period.
-            //     2) Has already been displayed ghostery_implied_flow_session_display_max times in the current session.
+            //     2) Has already been displayed evidon_implied_flow_session_display_max times in the current session.
             //   - The Explicit Consent screen:
             //     1) Consent has already been given.
             @Override
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
             // before any trackers are started. In this demo, all trackers are only started from within
             // the manageTrackers method, and the manageTrackers method is only called from the App Notice
             // call-back handler. This ensures that trackers are only started with a users prior consent.
-            appNotice = new AppNotice(this, GHOSTERY_TOKEN, appNotice_callback);
+            appNotice = new AppNotice(this, EVIDON_TOKEN, appNotice_callback);
 
             // Start the implied-consent flow (recommended)
             //   0: Displays on first start and every notice ID change (recommended).
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
             // before any trackers are started. In this demo, all trackers are only started from within
             // the manageTrackers method, and the manageTrackers method is only called from the App Notice
             // call-back handler. This ensures that trackers are only started with a users prior consent.
-            appNotice = new AppNotice(this, GHOSTERY_TOKEN, appNotice_callback, false);
+            appNotice = new AppNotice(this, EVIDON_TOKEN, appNotice_callback, false);
 
             // Start the consent flow:
             appNotice.startConsentFlow();
@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
             // This demonstrates how to manage a tracker that can both be enabled and disabled in a
             // single session. The AdMob tracker is turned on and off as directed by a user's
             // privacy preferences.
-            Boolean adMobEnabled = trackerHashMap.get(GHOSTERY_TRACKERID_ADMOB) == null? false : trackerHashMap.get(GHOSTERY_TRACKERID_ADMOB);
+            Boolean adMobEnabled = trackerHashMap.get(EVIDON_TRACKERID_ADMOB) == null? false : trackerHashMap.get(EVIDON_TRACKERID_ADMOB);
 
             if (adMobEnabled) {
                 boolean inEmulator = Build.BRAND.toLowerCase().startsWith("generic");
@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
             // privacy preferences. But when a user requests that this tracker be turned off in the
             // privacy preferences, this demonstrates one way to notify that user to restart
             // the app.
-            Boolean crashlyticsEnabled = trackerHashMap.get(GHOSTERY_TRACKERID_CRASHLYTICS) == null? false : trackerHashMap.get(GHOSTERY_TRACKERID_CRASHLYTICS);
+            Boolean crashlyticsEnabled = trackerHashMap.get(EVIDON_TRACKERID_CRASHLYTICS) == null? false : trackerHashMap.get(EVIDON_TRACKERID_CRASHLYTICS);
             if (Fabric.isInitialized()) {    // Crashlytics is running in this session
                 if (crashlyticsEnabled) {
                     // Toast the Crashlytics is enabled message (optional)

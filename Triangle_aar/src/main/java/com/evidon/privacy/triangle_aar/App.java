@@ -1,4 +1,4 @@
-package com.ghostery.privacy.triangle_aar;
+package com.evidon.privacy.triangle_aar;
 
 import android.app.Application;
 import android.content.Context;
