@@ -1,4 +1,4 @@
-package com.ghostery.privacy.triangle_aar;
+package com.evidon.privacy.triangle_aar;
 
 /**
  * Created by Steven.Overson on 3/24/2015.
