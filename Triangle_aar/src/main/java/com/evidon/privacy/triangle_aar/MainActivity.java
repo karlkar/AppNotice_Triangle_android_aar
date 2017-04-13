@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Evidon variables
     // Note: Use your custom values for the Company ID, Notice ID and all or your tracker IDs. These test values won't work in your environment.
-    private static final String EVIDON_TOKEN = "bff0f04910354fb8a042650840056c9d"; // My Evidon App Notice token (NOTE: Use your value here)
+    private static final String EVIDON_TOKEN = "93cf713eb6cf45348563183d6d9d7184"; // My Evidon App Notice token (NOTE: Use your value here)
 
     // Evidon tracker IDs (NOTE: you will need to define a variable for each tracker you have in your app)
     private static final int EVIDON_TRACKERID_ADMOB = 464; // Tracker ID: AdMob
