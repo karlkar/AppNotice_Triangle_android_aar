@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 	private boolean appRestartRequired; // Evidon parameter to track if app needs to be restarted after opt-out
     private AdView adView;
 	private final boolean isTestingAds = true; // Switch to make it easy on changing ad-testing mode
-    private final String modeImplied = getResources().getString(R.string.mode_implied);
+    private String modeImplied;
     private final static boolean IS_IMPLIED_MODE = false;  // Used to specify explicit-mode when AppNotice is instantiated
     private final static int IMPLIED_DEFAULT_BEHAVIOR = 0;  // Default: Displays on first start and every notice ID change
 
@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Context context = App.getContext();
         activity = this;
+        modeImplied = getResources().getString(R.string.mode_implied);
 
         AppCompatTextView sdkVersionTextView = (AppCompatTextView)findViewById(R.id.sdk_version);
         sdkVersionTextView.setText("SDK v." + AppNotice.sdkVersionName + "." + String.valueOf(AppNotice.sdkVersionCode));
