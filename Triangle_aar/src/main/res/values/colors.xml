@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Ghostery SDK colors -->
-    <color name="ghosteryColorPrimary">#7CB342</color>
-    <color name="ghosteryColorPrimaryDark">#33691E</color>
-    <color name="ghosteryColorAccent">#00838F</color>
-    <color name="ghosteryColorButtonPrimary">#7CB342</color>
-    <color name="ghosteryColorButtonTextPrimary">#FFFFFF</color>
-    <color name="ghosteryColorButtonSecondary">#CCCCCC</color>
-    <color name="ghosteryColorButtonTextSecondary">#666666</color>
-    <color name="ghosteryColorButtonTextBorderless">#7CB342</color>
+    <!-- Evidon SDK colors -->
+    <color name="evidonColorPrimary">#7CB342</color>
+    <color name="evidonColorPrimaryDark">#33691E</color>
+    <color name="evidonColorAccent">#00838F</color>
+    <color name="evidonColorButtonPrimary">#7CB342</color>
+    <color name="evidonColorButtonTextPrimary">#FFFFFF</color>
+    <color name="evidonColorButtonSecondary">#CCCCCC</color>
+    <color name="evidonColorButtonTextSecondary">#666666</color>
+    <color name="evidonColorButtonTextBorderless">#7CB342</color>
 
 </resources>
