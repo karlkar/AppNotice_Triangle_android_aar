@@ -45,7 +45,7 @@ android {
 //}
 
 dependencies {
-    compile 'com.ghostery.privacy.appnoticesdk:AppNoticeSDK:2.2.0-rc12'
+    compile 'com.ghostery.privacy.appnoticesdk:AppNoticeSDK:2.2.0'
     compile('com.crashlytics.sdk.android:crashlytics:2.5.2@aar') {
         transitive = true;
     }
