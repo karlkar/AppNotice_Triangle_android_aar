@@ -24,8 +24,8 @@ android {
         applicationId "com.evidon.privacy.triangle_aar"
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 58
-        versionName "2.2.0"
+        versionCode 59
+        versionName "2.2.1"
     }
     buildTypes {
         release {
@@ -45,14 +45,14 @@ android {
 //}
 
 dependencies {
-    compile 'com.ghostery.privacy.appnoticesdk:AppNoticeSDK:2.2.0'
+    compile 'com.ghostery.privacy.appnoticesdk:AppNoticeSDK:2.2.1'
     compile('com.crashlytics.sdk.android:crashlytics:2.5.2@aar') {
-        transitive = true;
+        transitive = true
     }
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
     compile 'com.google.android.gms:play-services-ads:10.2.1'
     compile('com.crashlytics.sdk.android:answers:1.3.6@aar') {
-        transitive = true;
+        transitive = true
     }
 }
