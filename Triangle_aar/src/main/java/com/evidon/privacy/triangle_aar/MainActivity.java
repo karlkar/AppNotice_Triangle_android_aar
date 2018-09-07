@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
             // before any trackers are started. In this demo, all trackers are only started from within
             // the manageTrackers method, and the manageTrackers method is only called from the App Notice
             // call-back handler. This ensures that trackers are only started with a users prior consent.
-            appNotice = new AppNotice(this, EVIDON_TOKEN, appNotice_callback, IS_IMPLIED_MODE);  // IS_IMPLIED_MODE = false
+            appNotice = new AppNotice(this, EVIDON_TOKEN, appNotice_callback, IS_IMPLIED_MODE,true);  // IS_IMPLIED_MODE = false
 
             // Start the explicit consent flow:
             appNotice.startConsentFlow();
