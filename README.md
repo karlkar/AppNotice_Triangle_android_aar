@@ -46,7 +46,7 @@ This section covers how to implement the App Notice SDK into an Android Studio p
   ```
   dependencies {
       //...
-      compile 'com.ghostery.privacy.appnoticesdk:AppNoticeSDK:x.y.z'
+      compile 'com.evidon.privacy.appnoticesdk:AppNoticeSDK:x.y.z'
   }
   ```
 
