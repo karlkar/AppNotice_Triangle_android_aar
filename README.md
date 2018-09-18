@@ -7,8 +7,8 @@ Manages three different types of third party SDK that provide services within th
   3. __Crashlytics:__ This SDK represents a class of SDKs that can NOT be disabled on the fly and require an app restart. This SDK is configured as an Analytics tracker.
 
 # App Notice SDK for Android<br>Installation and Customization
-*Current version: [v2.2.2.3][version]*
-Last updated: Jul 09, 2018
+*Current version: [v2.2.2.4][version]*
+Last updated: Sep 17, 2018
 
 
 ## Prerequisites
@@ -154,7 +154,7 @@ This section covers how to implement the App Notice SDK into an Android Studio p
            // before any trackers are started. In this demo, all trackers are only started from within
            // the manageTrackers method, and the manageTrackers method is only called from the App Notice
            // call-back handler. This ensures that trackers are only started with a users prior consent.
-           appNotice = new AppNotice(this, EVIDON_TOKEN, appNotice_callback, IS_IMPLIED_MODE);  // IS_IMPLIED_MODE = false
+            appNotice = new AppNotice(this, EVIDON_TOKEN, appNotice_callback, IS_IMPLIED_MODE,true);  // IS_IMPLIED_MODE = false
 
            // Start the explicit consent flow:
            appNotice.startConsentFlow();
@@ -318,7 +318,7 @@ If your app will allow the user to continue to use the app with limited function
 * After creating an App Notice, be sure to use that App Notice's token in the applicable version of your app when you instantiate the App Notice SDK inside your app. For example, when you instantiate the App Notice object, use the new value for the token in this method call:
 
 ```java
-appNotice = new AppNotice(this, EVIDON_TOKEN, appNotice_callback, IS_IMPLIED_MODE);
+appNotice = new AppNotice(this, EVIDON_TOKEN, appNotice_callback, IS_IMPLIED_MODE,true);
 ```
 
 
