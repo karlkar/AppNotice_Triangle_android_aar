@@ -27,7 +27,7 @@ import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity {
     private final static String TAG = "Triangle_aar";
-    private static Activity activity;
+    private Activity activity;
 
     // Remove the below line after defining your own ad unit ID.
     private static final String TOAST_ADMOB_ENABLE = "AdMob ads are being shown.";
