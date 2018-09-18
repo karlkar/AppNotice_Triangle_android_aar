@@ -7,7 +7,7 @@ Manages three different types of third party SDK that provide services within th
   3. __Crashlytics:__ This SDK represents a class of SDKs that can NOT be disabled on the fly and require an app restart. This SDK is configured as an Analytics tracker.
 
 # App Notice SDK for Android<br>Installation and Customization
-*Current version: [v2.2.2.4][version]*
+*Current version: [v2.2.2.4][version]*  
 Last updated: Sep 17, 2018
 
 
@@ -23,7 +23,7 @@ In this documentation, these terms are defined as follows:
 ## Compliance
 To be in compliance, your app must honor a user's prior consent and withdrawl of consent related to tracking. The associated [Triangle app](https://github.com/evidon/AppNotice_Triangle_android_aar) demonstrates one way to do this for two different trackers. The sample code in this ReadMe document is from this [Triangle app](https://github.com/evidon/AppNotice_Triangle_android_aar).
 * __Prior Consent:__ You must get a user's consent before any trackers are started.
-* __Withdrawl of Consent:__ You must do one of these two things:
+* __Withdrawl of Consent:__ You must do one of these two things: 
   1. If a tracker is enabled and can be disabled or stopped in the current session, that tracker must be turned off in a way that it is no longer tracking the user in this session and future sessions.
   2. If a tracker is enabled and it can NOT be turned off or disabled in the current session, you must notify the user that they will continue to be tracked until the app is restarted. Then when the app is restarted, don't start the specified trackers.
 
@@ -37,6 +37,7 @@ This section covers how to implement the App Notice SDK into an Android Studio p
   allprojects {
       repositories {
           jcenter()
+          maven { url "https://maven.google.com" }
       }
   }
   ```
@@ -48,6 +49,12 @@ This section covers how to implement the App Notice SDK into an Android Studio p
       //...
       compile 'com.evidon.privacy.appnoticesdk:AppNoticeSDK:x.y.z'
   }
+  ```
+  ```
+  repositories {
+     //..
+        maven { url  "https://dl.bintray.com/ghostery/maven" }
+    }
   ```
 
 3. Integrate the App Notice SDK into your code:
@@ -85,22 +92,22 @@ This section covers how to implement the App Notice SDK into an Android Studio p
        setContentView(R.layout.activity_main);
        Context context = App.getContext();
        activity = this;
-
+   
        AppCompatTextView sdkVersionTextView = (AppCompatTextView)findViewById(R.id.sdk_version);
        sdkVersionTextView.setText("SDK v." + AppNotice.sdkVersionName + "." + String.valueOf(AppNotice.sdkVersionCode));
-
+   
        // Get the AdMob banner view and set an ad-loaded listner
        adView = (AdView) findViewById(R.id.adView);
        adView.setAdListener(new AdListener() {
            @Override
            public void onAdLoaded() {
-   		// Handle ad-loaded event
+       	// Handle ad-loaded event
            }
        });
-
+   
        // Create the callback handler for the App Notice SDK
        appNotice_callback = new AppNotice_Callback() {
-
+   
            // Called by the SDK when the user accepts or declines tracking from one of the consent notice screens
            @Override
            public void onOptionSelected(boolean isAccepted, HashMap<Integer, Boolean> appNotice_privacyPreferences) {
@@ -112,7 +119,7 @@ This section covers how to implement the App Notice SDK into an Android Studio p
                    Toast.makeText(activity, R.string.decline_state_error, Toast.LENGTH_LONG).show();
                }
            }
-
+   
            // Called by the SDK when the startConsentFlow method is called and the SDK state indicates that the SDK doesn't need to be displayed.
            // The SDK is displayed in the following conditions and skipped in all others:
            //   - The Implied Consent screen:
@@ -126,15 +133,36 @@ This section covers how to implement the App Notice SDK into an Android Studio p
            public void onNoticeSkipped(boolean isAccepted, HashMap<Integer, Boolean> trackerHashMap) {
                manageTrackers(trackerHashMap);
            }
-
+   
            // Called by the SDK when the app-user is finished managing their privacy preferences on the Manage Preferences screen and navigates back to your app
            @Override
            public void onTrackerStateChanged(HashMap<Integer, Boolean> trackerHashMap) {
                manageTrackers(trackerHashMap);
            }
-
+   
        };
-
+  
+           /** EU-GDPR Compliance Country List.
+              Primary collection that designates the countries which the GDPR compliant workflow will apply to.
+ 
+              Adding country codes to this collection will apply the GDPR compliant workflow to users' experiences
+              who are determined to be from that country.
+ 
+              Input ISO-3166 compliant country codes only. (Example: "FR", "NL", "IT")
+              https://www.iso.org/iso-3166-country-codes.html
+              https://www.iso.org/obp/ui/#search/code/
+           */
+           
+          // Example of adding a specific country code to the list.
+          // To add specific country code to the list.
+          AppNotice.addGDPRCountry("US"); // adds "US" to the GDPR countries List.
+          
+           // To add multiple country codes, provide ArrayList of countries.
+          ArrayList<String> countries = new ArrayList<>();
+            countries.add("US");
+            countries.add("IN");
+          AppNotice.addGDPRCountries(countries);
+          
        boolean isImplied = AppData.getString(AppData.APPDATA_CONSENT_FLOW_MODE, modeImplied).equals(modeImplied);
        if (isImplied) {
            // Example of instantiating the App Notice SDK in implied mode.
@@ -143,7 +171,7 @@ This section covers how to implement the App Notice SDK into an Android Studio p
            // the manageTrackers method, and the manageTrackers method is only called from the App Notice
            // call-back handler. This ensures that trackers are only started with a users prior consent.
            appNotice = new AppNotice(this, EVIDON_TOKEN, appNotice_callback);
-
+   
            // Start the implied consent flow (recommended)
            //   0: Displays on first start and every notice ID change (recommended).
            //   1+: Is the max number of times to display the consent screen on start up in a 30-day period.
@@ -154,8 +182,8 @@ This section covers how to implement the App Notice SDK into an Android Studio p
            // before any trackers are started. In this demo, all trackers are only started from within
            // the manageTrackers method, and the manageTrackers method is only called from the App Notice
            // call-back handler. This ensures that trackers are only started with a users prior consent.
-            appNotice = new AppNotice(this, EVIDON_TOKEN, appNotice_callback, IS_IMPLIED_MODE,true);  // IS_IMPLIED_MODE = false
-
+           appNotice = new AppNotice(this, EVIDON_TOKEN, appNotice_callback, IS_IMPLIED_MODE, GDPR_Required );  // IS_IMPLIED_MODE = false, GDPR_Required= true(This enables the GDPR Privacy policy)
+   
            // Start the explicit consent flow:
            appNotice.startConsentFlow();
        }
@@ -250,9 +278,9 @@ This section covers how to implement the App Notice SDK into an Android Studio p
    ```
 
    3.6. The AppNotice_Callback handler must override these three methods as shown in section 3.4 above:
-
+      
       *  **onOptionSelected**: This method is called by the SDK when the user accepts or declines tracking from either the Implied Consent dialog or the Explicit Consent dialog. This method has these two parameters:
-        *  boolean isAccepted: True if the user clicked Accept on the Explicit Consent dialog or when they close the Implied Consent dialog. False if the user clicked Decline on the Explicit Consent dialog (the false state is deprecated and will be removed in a future version).
+        *  boolean isAccepted: True if the user clicked Accept on the Explicit Consent dialog or when they close the Implied Consent dialog. False if the user clicked Decline on the Explicit Consent dialog.
         *  HashMap<Integer, Boolean> trackerHashMap: A key/value map of all defined non-essential trackers. The key is the tracker ID and the value is true if the tracker is on and false if the tracker is off. **Note:** If the user's device is offline when the App Notice SDK first starts, the returned hashmap object will be empty. This state can be treated as if all optional trackers are on.
       *  **onNoticeSkipped**: This method is called by the SDK when the startConsentFlow method is called and the SDK state indicates that the SDK doesn't need to be displayed. The SDK is displayed in the following conditions and skipped in all others:
         * The Implied Consent dialog:
@@ -267,7 +295,7 @@ This section covers how to implement the App Notice SDK into an Android Studio p
 
    3.7. In your callback methods, add code to handle responses as needed.
       * In the case where App Notice process returns true (accepted), you should handle the tracker information returned in the trackerPreferences map. Only enable/start tracking for trackers that are enabled, and disable/don’t start tracking for trackers that are disabled.
-      * **Note:** In the case where the app-user declines the explicit notice, they are blocked from entering the app, so the App Notice process never returns false (declined).
+      * **Note:** In the case where the app-user from Non-GDPR countries declines the explicit notice, they are blocked from entering the app, so the App Notice process never returns false (declined). If an app-user from a GDPR country declines the explicit notice, the trackers will be disabled and the user may continue with the application
       * In the case where onTrackerStateChanged is called and the app has already started trackers that are not turned off, either turn them off at this point, or inform the user that the applicable trackers will be disabled when the app is next started.
       * Notice that the provided sample code above, the code to initialize AdMob, has been moved into a new manageTrackers method to facilitate the various ways it can be managed. It also includes an example of how to turn this tracker off.
 
@@ -329,10 +357,9 @@ You can customize text and color in the AAR-based App Notice SDK for Android. Yo
 To change the message on the Consent screen, add the applicable string parameter to your app's string resource file and customize the text:
 
   ```xml
-  <!-- Text of the message nn the Implied Consent screen. -->
-  <string name="evidon_manage_preferences_implied_message">This app uses technologies so that we, and our partners, can remember you and understand how you use our app. To see a list of these technologies and choose whether they can be used, please manage your preferences below. Further use of this app will be considered consent.</string>
-  <!-- Text of the message on the Explicit Consent screen. -->
-  <string name="evidon_manage_preferences_explicit_message">This app uses technologies so that we, and our partners, can remember you and understand how you use our app. To see a list of these technologies and choose whether they can be used, please manage your preferences.\n\nBefore proceeding, you must accept, decline or manage your privacy preferences below.</string>
+  <!-- Text of the message on the Consent screen. -->
+  <string name="evidon_notification_summary">We rely on advertising to support this app. To do so, we work with partners that may serve advertising based on your interests. To manage your privacy preferences, tap below.</string>
+
   ```
 
 ### Theme Customization:
